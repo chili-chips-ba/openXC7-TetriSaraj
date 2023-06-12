@@ -1,0 +1,96 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x0000000000100000 0x0000000000400000 xr
+RAM              0x0000000000000000 0x0000000000004000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+.text           0x0000000000100000     0x1514
+                0x0000000000100000                . = ALIGN (0x4)
+ *(.text)
+ .text          0x0000000000100000       0xd8 /tmp/ccV8rhYq.o
+ .text          0x00000000001000d8     0x12f8 /tmp/cc9pHdop.o
+                0x000000000010050c                Rotate
+                0x00000000001005f8                DoesPieceFit
+                0x0000000000100768                main
+ .text          0x00000000001013d0      0x120 /tmp/ccMGbq1o.o
+                0x00000000001013d0                putchar
+                0x0000000000101420                print
+                0x0000000000101474                print_hex
+ *(.text*)
+ *(.rodata)
+ .rodata        0x00000000001014f0        0xd /tmp/cc9pHdop.o
+ *fill*         0x00000000001014fd        0x3 
+ .rodata        0x0000000000101500       0x11 /tmp/ccMGbq1o.o
+ *(.rodata*)
+ *(.srodata)
+ *(.srodata*)
+                0x0000000000101514                . = ALIGN (0x4)
+ *fill*         0x0000000000101511        0x3 
+                0x0000000000101514                _etext = .
+                0x0000000000101514                _sidata = _etext
+
+.rela.dyn       0x0000000000101514        0x0
+ .rela.text     0x0000000000101514        0x0 /tmp/ccV8rhYq.o
+
+.data           0x0000000000000000       0x78 load address 0x0000000000101514
+                0x0000000000000000                . = ALIGN (0x4)
+                0x0000000000000000                _sdata = .
+                0x0000000000000000                _ram_start = .
+                0x0000000000000000                . = ALIGN (0x4)
+ *(.data)
+ .data          0x0000000000000000        0x0 /tmp/ccV8rhYq.o
+ .data          0x0000000000000000       0x70 /tmp/cc9pHdop.o
+                0x0000000000000000                tetromino
+ .data          0x0000000000000070        0x0 /tmp/ccMGbq1o.o
+ *(.data*)
+ *(.sdata)
+ .sdata         0x0000000000000070        0x8 /tmp/cc9pHdop.o
+                0x0000000000000070                nFieldWidth
+                0x0000000000000074                nFieldHeight
+ *(.sdata*)
+                0x0000000000000078                . = ALIGN (0x4)
+                0x0000000000000078                _edata = .
+
+.bss            0x0000000000000078      0x968 load address 0x000000000010158c
+                0x0000000000000078                . = ALIGN (0x4)
+                0x0000000000000078                _sbss = .
+ *(.bss)
+ .bss           0x0000000000000078        0x0 /tmp/ccV8rhYq.o
+ .bss           0x0000000000000078      0x967 /tmp/cc9pHdop.o
+                0x0000000000000078                pField
+ .bss           0x00000000000009df        0x0 /tmp/ccMGbq1o.o
+ *(.bss*)
+ *(.sbss)
+ .sbss          0x00000000000009df        0x1 /tmp/cc9pHdop.o
+                0x00000000000009df                buttons
+ *(.sbss*)
+ *(COMMON)
+                0x00000000000009e0                . = ALIGN (0x4)
+                0x00000000000009e0                _ebss = .
+
+.heap           0x00000000000009e0        0x0
+                0x00000000000009e0                . = ALIGN (0x4)
+                0x00000000000009e0                _heap_start = .
+LOAD /tmp/ccV8rhYq.o
+LOAD /tmp/cc9pHdop.o
+LOAD /tmp/ccMGbq1o.o
+OUTPUT(main.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x0000000000000000       0x21
+ .riscv.attributes
+                0x0000000000000000       0x1f /tmp/ccV8rhYq.o
+ .riscv.attributes
+                0x000000000000001f       0x21 /tmp/cc9pHdop.o
+ .riscv.attributes
+                0x0000000000000040       0x21 /tmp/ccMGbq1o.o
+
+.comment        0x0000000000000000       0x15
+ .comment       0x0000000000000000       0x15 /tmp/cc9pHdop.o
+                                         0x16 (size before relaxing)
+ .comment       0x0000000000000015       0x16 /tmp/ccMGbq1o.o
