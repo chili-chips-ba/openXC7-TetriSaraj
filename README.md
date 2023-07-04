@@ -31,3 +31,9 @@ As you can see there are 7 shapes in Tetris as well as TetriSaraj and when you i
 We'll just store the original 7 shapes in a matrix (7x16) of 1s and 0s, where 1s represent blocks and 0s represent empty space. For example we can take the 2nd tetromino, squared one, and write it row by row going from left to right: 0, 0, 0, 0; 0, 1, 1, 0; 0, 1, 1, 0 ; 0, 0, 0, 0; and then we store this as an array of 16 elements. We do this for all shapes.
 
 Now that we have shapes written inside of a 7x16 matrix, how can we handle the rotation?
+
+Basically, we "rotate" block by block or better said we return the index of the rotated pixel on original shape. For example, let's have a look at this shape:
+
+![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/7cb8b1d4-f416-4e36-8ed8-bdb3f070f1d6)
+
+The original shape is the first one and when we rotate it clockwise we get 3 different shapes. Let's observe marked block, since "rotation" is being executed block by block. The coordinates of the marked block in original shape are 1 and 1 and when we rotate this block clockwise, the function returns 
