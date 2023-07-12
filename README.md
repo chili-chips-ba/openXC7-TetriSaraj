@@ -14,9 +14,15 @@ TetriSaraj is Tetris-like game where the pieces(tetrominoes) are not coming from
 <img width="408" alt="tetrisaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/ceb74ee9-2ee2-461a-ab3f-e279f34bf71e">
 
 **<h3> Development Methodology </h3>**
- The idea was to develop the game first for the PC and when that is working correctly, then we switch to Basys3 (port the game to the bare-metal RISC-V and enable VGA contoller for game visualization).
+ The idea was to develop the game first for the PC and it's shown on the image below:
 
- In the next chapters we'll describe specifics about the game for both PC and bare-metal RISC-V, the logic stays the same but game controls, timing and rendering are different.
+![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/146a804c-dc82-46a3-8c0f-a984b1f0f3dc)
+
+After this has started working we implemented the same thing to run on Basys3 (ported the game to the bare-metal RISC-V and enable VGA contoller for game visualization). The results are shown on the image below:
+
+ubacit sliku dobru
+
+In the next chapters we'll describe specifics about the game for both PC and bare-metal RISC-V, the logic stays the same but game controls, timing and rendering are different.
 
 **<h3> Game logic of TetriSaraj </h3>**
 
@@ -59,7 +65,5 @@ As for the timing of the game, we used our own game ticks. As the game progresse
 As for the controls, on the PC side we used "GetAsyncKeyState" method to detect if some keyboard buttons were pressed. The controls are: left, right and up arrow and Z key for rotation. So when we detect some key was pressed we first need to check if the piece can be moved at all. That's covered by "DoesPieceFit" function. The same logic applies to Basys3 implementation, but we have to create a gpio register on FPGA side and then read the register values. This is done by "GetButtonsState" function.
 
 **<h3> Rendering of TetriSaraj </h3>**
-For video on PC side we use Windows.h library, where we can create a console screen and draw on it. We said that we keep the info about playing field, where all the shapes are and everything else, so using that we draw on the screen. For the FPGA side, this was a bit more complicated, but as for the C side, we kept the info in the same matrix (field) and we wrote these values to a register on FPGA side. The details will be explained in the next chapters. The PC console TetriSaraj is shown below:
-
-![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/146a804c-dc82-46a3-8c0f-a984b1f0f3dc)
+For video on PC side we use Windows.h library, where we can create a console screen and draw on it. We said that we keep the info about playing field, where all the shapes are and everything else, so using that we draw on the screen. For the FPGA side, this was a bit more complicated, but as for the C side, we kept the info in the same matrix (field) and we wrote these values to a register on FPGA side. The details will be explained in the next chapters. The PC console TetriSaraj is shown in the **Development Methodology** chapter:
 
