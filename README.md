@@ -41,11 +41,12 @@ Let's start with tetrominoes, they're shown on the image below.
 As you can see there are 7 shapes in Tetris as well as TetriSaraj and when you include rotation we get 28 different shapes, so how can we store them? 
 We'll just store the original 7 shapes in a matrix (7x16) of 1s and 0s, where 1s represent blocks and 0s represent empty space. For example we can take the 2nd tetromino, squared one, and write it row by row going from left to right: 0, 0, 0, 0; 0, 1, 1, 0; 0, 1, 1, 0 ; 0, 0, 0, 0; and then we store this as an array of 16 elements. We do this for all shapes. As for the playing field, infos about i t are kept in the array named "field".
 
-Now that we have shapes written inside of a 7x16 matrix, how can we handle the rotation? The Rotate function expects 3 arguments, x coordinate, y coordinate and rotation and it returns an index of that block in the original piece. Coordinates x and y represent coordinates of a block in specified rotation, so if we have x = 1 and y = 1 and rotation is 90 degrees then the block on coordinates 1 and 1, with rotation 90 degrees is the same as block with index 9.
+Now that we have shapes written inside of a 7x16 matrix, how can we handle the rotation? The Rotate function expects 3 arguments, x coordinate, y coordinate and rotation and it returns an index of that block in the original piece. We should note that the coordinates have values from 0 to 3 and index can have values from 0 to 15. As for the rotation, we have 4 ways of rotating our tetromino: 0, 90, 180, 270 degrees. Rotation is being executed clockwise.
 
-For example, let's have a look at this shape:
+For example, let's have a look at this shape and it's rotation:
 
-![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/0da67920-80f1-495f-a885-143790914469)
+![rotacija_bez](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/88ec5169-c7a7-4ad1-a3b8-18fb19fd305e)
+
 
 Let's suppose that the 1st piece is the original one and other 3 are the rotations of it. And now we want to find out on which index of the original piece is the block on coordinates x = 2 and y = 1 with rotation of 90 degrees. The relation between shapes rotated by 90 degrees is: "index = 12 + y - (x * 4)". That means this specific block is on index 5 of the original piece. The same applies to other rotations and other figures, but let's have a look with rotation of 270 degrees. We observe the block on coordinates x = 1 and y = 2 and the relation for this case is "index = 3 - y + (x * 4)". That gives us 5 again, so that means that this specific block is the same as the block on index 5 of the original piece.
 
