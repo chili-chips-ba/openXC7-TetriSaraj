@@ -1,40 +1,35 @@
 # openXC7-TetriSaraj
-Xilinx Basys3 demo for how to use openXC7 open-source tools to implement a RISC-V SoC + SW for this classic game, now with a twist.
 
 **<h3> Tetris recap </h3>**
 
-Most of us know what is Tetris and how it's played, but here is a short introduction for those who don't. Tetris is a game where players maneuver differently shaped pieces called tetrominoes as they descend onto the playing field. The objective is to complete lines by filling them with tetrominoes. When a line is completed, it disappears, and the player earns points. The player can then utilize the cleared spaces to continue playing. The game ends if the lines reach the top of the playing field without being cleared. The longer the player can delay this outcome, the higher their score. In multiplayer games, players compete to outlast their opponents. 
+While most of us know what Tetris is and how to play it, let's neverthless start with a brief recap. Tetris is a combinatorial game where a player maneuvers differently-shaped pieces (aka <i>'tetrominoes'</i>) as they descend onto the playing field. The objective is to complete the lines by filling them with <i>tetrominoes</i>. When a line is fully filled, it gets automatically cleared, and the player earns points. The player can then utilize the cleared spaces to continue playing. It's <i>Game Over</i> when the lines reach the top of the playing field without having been cleared. The longer a player can delay this outcome, the higher his/her score. In the multiplayer games, the players compete to outlast their opponents. 
 
 ![Typical_Tetris_Game](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/bbd94950-8c0d-4dce-a1da-66681715f41d)
 
 **<h3> TetriSaraj introduction </h3>**
 
-TetriSaraj is Tetris-like game where the pieces(tetrominoes) are not coming from the top but from sides. The side chosing is completely random so that gives a player less time to think. Pieces are "falling" horizontally from both sides one at the time and the logic is the same. The objective is to complete vertical lines by filling them with tetrominoes.
+In our <i><b>TetriSaraj</i></b>, the pieces (<i>tetrominoes</i>) are sliding in from from the sides, which is completely random, leaving less time to think. While the pieces are "falling" horizontally from both sides, one at the time, the logic is otherwise the same as ordinary Tetris, and objective is to complete the vertical lines by filling them with <i>tetrominoes</i>.
 
 <img width="408" alt="tetrisaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/ceb74ee9-2ee2-461a-ab3f-e279f34bf71e">
 
 **<h3> Development Methodology </h3>**
- The idea was to develop the game first for the PC and it's shown on the image below:
+While the Basys3 SOC with our proprietary MegaCharacter-based Video Controller were being designed by the HW developers on our team, the SW group worked on the game algorithm in the comfortable WinOS PC Visual Studio setting, where hi-res graphic output was emulated on a low-res terminal, as shown on the image below:
 
 ![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/146a804c-dc82-46a3-8c0f-a984b1f0f3dc)
 
-After this has started working we implemented the same thing to run on Basys3 (ported the game to the bare-metal RISC-V and enable VGA contoller for game visualization). The results are shown on the image below:
+Only when the logic of the game was fully worked out, have we started porting it to the bare-metal RISC-V, implemented as the soft-CPU in Basys3, and complemented with special VGA controller for game visualization. The results are shown on the image below:
 
 ubacit sliku dobru
 
-In the next chapters we'll describe specifics about the game for both PC and bare-metal RISC-V, the logic stays the same but game controls, timing and rendering are different.
+In the subsequent sections we'll describe the algorithm basics, i.e. the logic of the game which stays the same for both full-fledged PC and bare-metal RISC-V CPU, as well as the game controls, timing and rendering, which are different. Our implementation process therefore had 4 main elements:
+- Game logic
+- Game controls
+- Game timing
+- Rendering
 
 **<h3> Game logic of TetriSaraj </h3>**
 
-The implementation contains 4 main phases:
-- Game timing
-- Game controls
-- Game logic
-- Rendering
-
-We will go through each one of these phases in detail. In this section we'll just go through Game logic phase since it's common for both implementations - the PC one and the Basys3 one.
-
-Let's start with tetrominoes, they're shown on the image below.
+Tetrominoes are the essence of the Game logic element. They're illustrated in the figure below.
 
 ![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/3f4bd9aa-19b2-46f8-92a8-beec3c671afe)
 
