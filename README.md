@@ -110,3 +110,27 @@ Given Basys3 max resolution of 640x480 RGB444, one MC in this case is a 16x16 bl
 For example, the 4x smaller, 12x less expensive TangNano9K could also easily host our game. On it, and without having to change the game logic, the same 40x30 <i>MC Frame Buffer</i> would be rendered on the considerably larger 1280x720 RGB888 HDMI screen, by using 32x24 MCs with 16,777,216 colors for each of its 768 dots. Other than the static load of the MCs, and slightly modified RTL for the video back-end, the rest remains the same. This makes for low-effort porting.  
 
 The next section brings about additional detail on our HW platform, and its video sub-system in particular.
+
+**<h3> Screen organization </h3>**
+The video interface between hardware and software consists of:
+- Screen of 640x480 RGB444 pixels divided into 40x30 (=1200) squares, each square being 16x16 pixels.
+- Hardware implements a character set of 16 elements. Each element is a 16x16 pixel image in full RGB444 color palette, requiring 384 bytes of memory for one element.
+- Software can program each of these 16 unique characters with arbitrary content.
+- Software uses these 16 arbitrary characters through a 40x30 FrameBuffer, where each location is represented by 4 bits, indicating to the hardware which of the 16 characters to display at that location.
+  
+The image illustrating the screen organization is showed below.
+
+![screen organization](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/998e4dfb-b04a-4d86-b838-fc6c62dfbd28)
+
+
+**<h3> Memory map </h3>**
+One of the first steps involves creating a memory map that governs the interaction between the CPU software and the hardware responsible for rendering the 40x30 = 1200 elements on the screen. This memory map can be viewed as the Instruction Set Architecture (ISA) of our graphic mini-controller, serving as a contract or interface between the software and hardware components.
+
+In this context, each element on the screen requires 4 bits of memory, while the CPU operates on a 32-bit architecture. Consequently, one CPU word can accommodate 8 elements. To represent a single line on the screen, we would need 5 such CPU words, as each line consists of 40 elements. Extrapolating this further, considering the entire screen, which comprises 30 lines, we would require a total of 5x30 = 150 CPU words to store the graphical information for the entire display.
+
+By organizing the memory in this manner and establishing the memory map, we enable effective communication between the CPU software and the hardware, facilitating the rendering of graphics on the screen. This approach ensures efficient utilization of memory and allows the CPU to access and manipulate the graphical data in a structured and predictable manner, thereby enabling smooth and controlled display updates.
+
+![cfb memory](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/41f832c8-d255-4cda-9bbf-6e44ffb6d460)
+
+
+
