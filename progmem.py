@@ -1,3 +1,4 @@
+
 import sys
 import struct
 
@@ -28,20 +29,24 @@ try:
 
         progmem_body = f"""
 module progmem (
-    // Closk & reset
+    // Clock & reset
     input wire clk,
     input wire rstn,
 
     // PicoRV32 bus interface
     input  wire        valid,
-    output wire        ready,
+    output wire        ready,	
     input  wire [31:0] addr,
-    output wire [31:0] rdata
+    output wire [31:0] rdata,
+	// Rewrite firmware
+    input  wire        wen,
+	input  wire [31:0] waddr,
+	input  wire [31:0] wdata
 );
 
   // ============================================================================
 
-  localparam MEM_SIZE_BITS = 10;  // In 32-bit words
+  localparam MEM_SIZE_BITS = 13;  // In 32-bit words
   localparam MEM_SIZE = 1 << MEM_SIZE_BITS;
   localparam MEM_ADDR_MASK = 32'h0010_0000;
 
@@ -69,6 +74,10 @@ module progmem (
   assign ready    = o_ready;
   assign rdata    = mem_data;
   assign mem_addr = addr[MEM_SIZE_BITS+1:2];
+
+  always @(posedge clk) begin    
+    if (wen) mem[waddr] <= wdata;				
+  end
 
 endmodule
 """
