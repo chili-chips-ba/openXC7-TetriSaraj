@@ -41,7 +41,12 @@ module picosoc_noflash (
 	output [31:0] iomem_addr,
 	output [31:0] iomem_wdata,
 	input  [31:0] iomem_rdata,
-
+	
+	// Rewrite firmware 
+    input		  progmem_wen,
+	input  [31:0] progmem_waddr,
+	input  [31:0] progmem_wdata,
+	
 	input  irq_5,
 	input  irq_6,
 	input  irq_7,
@@ -49,8 +54,8 @@ module picosoc_noflash (
 	output ser_tx,
 	input  ser_rx
 );
-	parameter integer MEM_WORDS = 4096; // zamijenio 1024 sa 4096 - 16kb ukupno
-	parameter [31:0] STACKADDR = (4*MEM_WORDS);       // end of memory,
+	parameter integer MEM_WORDS = 8192;
+	parameter [31:0] STACKADDR = (4*MEM_WORDS);       // end of memory
 	parameter [31:0] PROGADDR_RESET = 32'h 0010_0000; // 1 MB into flash
 
 	reg [31:0] irq;
@@ -154,7 +159,10 @@ module picosoc_noflash (
         .valid  (mem_valid && mem_addr >= 4*MEM_WORDS && mem_addr < 32'h 0200_0000),
         .ready  (progmem_ready),
         .addr   (mem_addr),
-        .rdata  (progmem_rdata)
+        .rdata  (progmem_rdata),
+		.wen	(progmem_wen),
+		.waddr	(progmem_waddr),
+		.wdata	(progmem_wdata)
     );
 
 	simpleuart simpleuart (
