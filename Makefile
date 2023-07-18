@@ -14,8 +14,8 @@ all: top.bit
 program: top.bit
 	openFPGALoader --board basys3 --bitstream $<
 	
-top.json: basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
-	yosys -p "synth_xilinx -flatten -abc9 -nobram -arch xc7 -top top; write_json top.json" basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
+top.json: top.basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
+	yosys -p "synth_xilinx -flatten -abc9 -nobram -arch xc7 -top top; write_json top.json" top.basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
 
 
 # The chip database only needs to be generated once
@@ -26,7 +26,7 @@ ${CHIPDB}/${PART}.bin:
 	rm -f ${PART}.bba
 
 top.fasm: top.json ${CHIPDB}/${PART}.bin
-	nextpnr-xilinx --chipdb ${CHIPDB}/${PART}.bin --xdc basys3.xdc --json top.json --fasm $@ --verbose --debug
+	nextpnr-xilinx --chipdb ${CHIPDB}/${PART}.bin --xdc top.basys3.xdc --json top.json --fasm $@ --verbose --debug
 	
 top.frames: top.fasm
 	fasm2frames --part ${PART} --db-root ${DB_DIR}/artix7 $< > $@ #FIXME: fasm2frames should be on PATH
