@@ -83,14 +83,14 @@ set_property -dict { PACKAGE_PIN U17   IOSTANDARD LVCMOS33 } [get_ports btnD]
 #set_property -dict { PACKAGE_PIN G3   IOSTANDARD LVCMOS33 } [get_ports {JA[7]}];#Sch name = JA10
 
 ##Pmod Header JB
-#set_property -dict { PACKAGE_PIN A14   IOSTANDARD LVCMOS33 } [get_ports {JB[0]}];#Sch name = JB1
-#set_property -dict { PACKAGE_PIN A16   IOSTANDARD LVCMOS33 } [get_ports {JB[1]}];#Sch name = JB2
-#set_property -dict { PACKAGE_PIN B15   IOSTANDARD LVCMOS33 } [get_ports {JB[2]}];#Sch name = JB3
-#set_property -dict { PACKAGE_PIN B16   IOSTANDARD LVCMOS33 } [get_ports {JB[3]}];#Sch name = JB4
-#set_property -dict { PACKAGE_PIN A15   IOSTANDARD LVCMOS33 } [get_ports {JB[4]}];#Sch name = JB7
-#set_property -dict { PACKAGE_PIN A17   IOSTANDARD LVCMOS33 } [get_ports {JB[5]}];#Sch name = JB8
-#set_property -dict { PACKAGE_PIN C15   IOSTANDARD LVCMOS33 } [get_ports {JB[6]}];#Sch name = JB9
-#set_property -dict { PACKAGE_PIN C16   IOSTANDARD LVCMOS33 } [get_ports {JB[7]}];#Sch name = JB10
+set_property -dict { PACKAGE_PIN A14   IOSTANDARD LVCMOS33 } [get_ports {jb[0]}]
+set_property -dict { PACKAGE_PIN A16   IOSTANDARD LVCMOS33 } [get_ports {jb[1]}]
+set_property -dict { PACKAGE_PIN B15   IOSTANDARD LVCMOS33 } [get_ports {jb[2]}]
+set_property -dict { PACKAGE_PIN B16   IOSTANDARD LVCMOS33 } [get_ports {jb[3]}]
+set_property -dict { PACKAGE_PIN A15   IOSTANDARD LVCMOS33 } [get_ports {jb[4]}]
+set_property -dict { PACKAGE_PIN A17   IOSTANDARD LVCMOS33 } [get_ports {jb[5]}]
+set_property -dict { PACKAGE_PIN C15   IOSTANDARD LVCMOS33 } [get_ports {jb[6]}]
+set_property -dict { PACKAGE_PIN C16   IOSTANDARD LVCMOS33 } [get_ports {jb[7]}]
 
 ##Pmod Header JC
 #set_property -dict { PACKAGE_PIN K17   IOSTANDARD LVCMOS33 } [get_ports {JC[0]}];#Sch name = JC1
@@ -141,13 +141,37 @@ set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports tx]
 
 
 ##Quad SPI Flash
-##Note that CCLK_0 cannot be placed in 7 series devices. You can access it using the
-##STARTUPE2 primitive.
+##Note that CCLK_0 cannot be placed in 7 series devices. You can access it using the STARTUPE2 primitive.
 #set_property -dict { PACKAGE_PIN D18   IOSTANDARD LVCMOS33 } [get_ports {QspiDB[0]}]
 #set_property -dict { PACKAGE_PIN D19   IOSTANDARD LVCMOS33 } [get_ports {QspiDB[1]}]
 #set_property -dict { PACKAGE_PIN G18   IOSTANDARD LVCMOS33 } [get_ports {QspiDB[2]}]
 #set_property -dict { PACKAGE_PIN F18   IOSTANDARD LVCMOS33 } [get_ports {QspiDB[3]}]
 #set_property -dict { PACKAGE_PIN K19   IOSTANDARD LVCMOS33 } [get_ports QspiCSn]
+
+# Seven segment displays related pins
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[7]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[6]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[5]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {cathodes[0]}]
+
+
+set_property PACKAGE_PIN W7 [get_ports {cathodes[6]}]
+set_property PACKAGE_PIN W6 [get_ports {cathodes[5]}]
+set_property PACKAGE_PIN U8 [get_ports {cathodes[4]}]
+set_property PACKAGE_PIN V8 [get_ports {cathodes[3]}]
+set_property PACKAGE_PIN U5 [get_ports {cathodes[2]}]
+set_property PACKAGE_PIN V5 [get_ports {cathodes[1]}]
+set_property PACKAGE_PIN U7 [get_ports {cathodes[0]}]
+set_property PACKAGE_PIN V7 [get_ports {cathodes[7]}]
+
+set_property -dict { PACKAGE_PIN U2   IOSTANDARD LVCMOS33 } [get_ports {anodes[0]}]
+set_property -dict { PACKAGE_PIN U4   IOSTANDARD LVCMOS33 } [get_ports {anodes[1]}]
+set_property -dict { PACKAGE_PIN V4   IOSTANDARD LVCMOS33 } [get_ports {anodes[2]}]
+set_property -dict { PACKAGE_PIN W4   IOSTANDARD LVCMOS33 } [get_ports {anodes[3]}]
 
 
 ## Configuration options, can be used for all designs
