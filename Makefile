@@ -1,57 +1,52 @@
-# Run these 4 lines every time you start WSL
-# export F4PGA_INSTALL_DIR=/opt/f4pga
-# export FPGA_FAM="xc7"
-# source "$F4PGA_INSTALL_DIR/$FPGA_FAM/conda/etc/profile.d/conda.sh"
-# conda activate $FPGA_FAM
+PREFIX ?= /snap/openxc7/current
+DB_DIR=${PREFIX}/opt/nextpnr-xilinx/external/prjxray-db
+CHIPDB=../chipdb
 
-# Then clean and compile firmware C files
-# make clean_fw
-# make firmware
+#PART = xc7a100tcsg324-1
+PART = xc7a35tcpg236-1
 
-# The last command is to generate the bit file
-# make -C .
 
-current_dir := ${CURDIR}
-TARGET      := basys3
-TOP         := top
 
-SOURCES     := \
-	${current_dir}/1.hw/ip.misc/debounce.v \
-	${current_dir}/1.hw/ip.misc/simpleuart.v \
-	/
-	${current_dir}/1.hw/ip.cpu/progmem.v \
-	${current_dir}/1.hw/ip.cpu/picorv32.v \
-	${current_dir}/1.hw/ip.cpu/picosoc_noflash.v \
-	/
-	${current_dir}/1.hw/ip.vga/vga_ram.v \
-	${current_dir}/1.hw/ip.vga/vga_map_ram.v \
-	${current_dir}/1.hw/ip.vga/vga_wrapper.v \
-	${current_dir}/1.hw/ip.vga/vga_controller.v \
-	\
-	${current_dir}/1.hw/top.basys3.v
+.PHONY: all
+all: top.bit
 
-BOARD_BUILDDIR := ${current_dir}/3.build
+.PHONY: program
+program: top.bit
+	openFPGALoader --board basys3 --bitstream $<
+	
+top.json: basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
+	yosys -p "synth_xilinx -flatten -abc9 -nobram -arch xc7 -top top; write_json top.json" basys3.v picosoc_noflash.v picorv32.v simpleuart.v progmem.v debounce.v vga_ram.v vga_map_ram.v vga_wrapper.v vga_controller.v seven_segment_ctrl.v uart_tx.v uart_rx.v
 
-#Install gcc package: apt install gcc-riscv64-unknown-elf
-CROSS=riscv64-unknown-elf-
 
-XDC := ${current_dir}1.hw/top.basys3.xdc
+# The chip database only needs to be generated once
+# that is why we don't clean it with make clean
+${CHIPDB}/${PART}.bin:
+	python3 ${PREFIX}/opt/nextpnr-xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
+	bbasm -l ${PART}.bba ${CHIPDB}/${PART}.bin
+	rm -f ${PART}.bba
 
-#include ${current_dir}/../../common/common.mk
+top.fasm: top.json ${CHIPDB}/${PART}.bin
+	nextpnr-xilinx --chipdb ${CHIPDB}/${PART}.bin --xdc basys3.xdc --json top.json --fasm $@ --verbose --debug
+	
+top.frames: top.fasm
+	fasm2frames --part ${PART} --db-root ${DB_DIR}/artix7 $< > $@ #FIXME: fasm2frames should be on PATH
 
-firmware: 2.sw/main.elf
-        $(CROSS)objcopy -O binary 2.sw/main.elf 2.sw/main.bin
-        python progmem.py
+top.bit: top.frames
+	xc7frames2bit --part_file ${DB_DIR}/artix7/${PART}/part.yaml --part_name ${PART} --frm_file $< --output_file $@
+	
 
-main.elf: 2.sw/main.lds 2.sw/start.s 2.sw/main.c
-        $(CROSS)gcc $(CFLAGS) -march=rv32im -mabi=ilp32 -Wl,--build-id=none,-Bstatic,-T,main.lds,-Map,main.map,--strip-debug -ffreestanding -nostdlib -o 2.sw/main.elf 2.sw/start.s 2.sw/main.c 2.sw/uart.c
-
-main.lds: 2.sw/sections.lds
-        $(CROSS)cpp -P -o $@ $^
-
+	
+.PHONY: clean
+clean:
+	@rm -f *.bit
+	@rm -f *.frames
+	@rm -f *.fasm
+	@rm -f *.json
 clean_fw:
-        rm -f 1.hw/ip.cpu/progmem.v
-        rm -f 2.sw/main.elf
-        rm -f 2.sw/main.lds
-        rm -f 2.sw/main.map
-        rm -f 2.sw/main.bin
+	rm -f main.elf
+	rm -f main.lds
+	rm -f main.map
+	rm -f main.bin
+	rm -f progmem.v
+	rm -f firmware.hex
+	rm -f main.hex
