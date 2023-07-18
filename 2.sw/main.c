@@ -1,11 +1,11 @@
 /*
  *  PicoSoC - A simple example SoC using PicoRV32
  *
- *  Copyright (C) 2017  Clifford Wolf <clifford@clifford.at>
+ *  Coyright (C) 2017  Clifford Wolf <clifford@clifford.at>
  *
- *  Permission to use, copy, modify, and/or distribute this software for any
+ *  Permission to use, coy, modify, and/or distribute this software for any
  *  purpose with or without fee is hereby granted, provided that the above
- *  copyright notice and this permission notice appear in all copies.
+ *  coyright notice and this permission notice appear in all copies.
  *
  *  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  *  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
@@ -17,12 +17,14 @@
  *
  */
 
+// INCLUDES AND DEFINES--------------------------------------------------
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 #include "uart.h"
 
-#define RAM_TOTAL 0x4000 // 16 KB
+#define RAM_TOTAL 0x2000 // 8 KB
 
 #define reg_uart_clkdiv (*(volatile uint32_t*)0x02000004)
 #define reg_uart_data (*(volatile uint32_t*)0x02000008)
@@ -30,8 +32,6 @@
 #define reg_gpio (*(volatile uint32_t*) 0x03000000)
 #define reg_video_char	((volatile uint32_t*)0x05100000)
 #define reg_video_map	((volatile uint32_t*)0x05200000)
-//#define reg_video_xofs  (*(volatile uint32_t*)0x05000000)
-//#define reg_video_yofs  (*(volatile uint32_t*)0x05000004)
 
 #define BUTTON_UP 0x01
 #define BUTTON_RIGHT 0x02
@@ -39,166 +39,467 @@
 #define BUTTON_DOWN 0x08
 #define BUTTON_CENTER 0x10
 
-// --------------------------------------------------------
+#define DELAY   10000
+
+#define 	fieldWidth		40
+#define		fieldHeight	30
+
+// GLOBAL VARIABLES--------------------------------------------------------
 
 uint8_t buttons;
+static uint32_t delay = DELAY;
+static uint8_t field[1200];
 
-/* Private functions */
-static void delay_ms(int);
-static void chars_init(void);
-static void board_init(void);
-static void get_input(void);
+static uint8_t tetrominoes[7][16]={{0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0},
+								   {0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0},
+								   {0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},
+								   {0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0},
+								   {0,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0},
+								   {0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,0},
+								   {0,0,1,0,0,0,1,0,0,1,1,0,0,0,0,0}};
 
-#define DELAY   122000  // Equivalent to 1 msec
-static uint32_t delay = 0;
-static uint8_t x = 0;
-static uint8_t y = 0;
-static uint8_t z = 0;
+// PRIVATE FUNCTIONS DECLARATIONS--------------------------------------------
 
-int nFieldWidth = 40;
-int nFieldHeight = 30;
-uint16_t pField[1200];
+static void CharactersInit(void);
+static void DisplayProjectName(void);
+static void DisplayCompanyName(void);
+static void DisplayGameName(void);
+static void DisplayGameOverScreen(void);
+static void GetButtonStates(void);
+static int Rotate(int x, int y, int r);
+static bool DoesPieceFit(int ntetrominoes, int nRotation, int nPosX, int nPosY);						  
+static void DisplayDigit(uint8_t number, uint8_t startX, uint8_t startY);
+static void WriteScore(void); 
 
-void get_input() {  
+// PRIVATE FUNCTIONS IMPLEMENTATION-------------------------------------------
+
+/* 
+ * brief   reads the gpio register and changes the state of buttons variable
+ * return  void
+ */
+void GetButtonStates() {  
 	buttons = (uint8_t)(reg_gpio >> 16)&0xFF;
 }
 
-void board_init() {
-	
-		for (int y = 0; y < 30; y++) 
-			for (int x = 0; x < 40; x++) // Board Boundary
-			{
-				if(y==1 || y==30 || x+1==40/2 || x==40/2){
-					reg_video_map[y*40+x]=15;
-				}
-				else{
-					reg_video_map[y*40+x]=14;
-				}
+/* 
+ * brief   displays openXC7 Demo on the screen
+ * return  void
+ */
+void DisplayProjectName() 
+{
+	uint8_t nameY = 3;
+	for (uint8_t y = 0; y < 30; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			reg_video_map[y * 40 + x] = 9;
 			
-			}
+			//o
+			if (((y == nameY || y == nameY + 4) && (x >= 6 && x <= 8)) || ((x == 6 || x == 8) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 1;
 
-	//reg_video_map[0] = 1; 			// Green square	on the corner x = 0, y = 0
-	//reg_video_map[39] = 4; 			// Yellow square on the corner x = 39, y = 0
-	//reg_video_map[29*40+0] = 14; 	// White square	on the corner x = 0, y = 29
-	//reg_video_map[29*40+39] = 15; 	// Black square on the corner x = 39, y = 29
-
+			//p
+			if (((y == nameY || y == nameY + 2) && (x >= 10 && x <= 12)) || (x == 10 && (y >= nameY && y <= nameY + 4)) || (x == 12 && (y >= nameY && y <= nameY + 2)))
+				reg_video_map[y * 40 + x] = 1;
+			
+			//e
+			if (((y == nameY || y == nameY + 2 || y == nameY + 4) && (x >= 14 && x <= 16)) || (x == 14 && (y >= nameY && y <= nameY + 4)))
+				reg_video_map[y * 40 + x] = 1;
+			
+			//n
+			if (((y == nameY) && (x >= 18 && x <= 20)) || ((x == 18 || x == 20) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 1;
+			
+			//x
+			if ((((x == 22 || x == 24) && (y >= nameY && y <= nameY + 4)) && (y != nameY + 2)) || (x == 23 && y == nameY + 2))
+				reg_video_map[y * 40 + x] = 2;
+			
+			//c
+			if (((y == nameY || y == nameY + 4) && (x >= 26 && x <= 28)) || (x == 26 && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 2;
+			
+			//7
+			if ((y == nameY && (x >= 30 && x <= 32)) || (x == 31 && (y >= nameY + 2 && y <= nameY + 4)) || (x == 32 && y == nameY + 1))
+				reg_video_map[y * 40 + x] = 2;
+		}
+	}
+}
+/* 
+ * brief   displays CHILI CHIPS on the screen
+ * return  void
+ */
+void DisplayCompanyName() 
+{	
+	uint8_t lineY = 11;
+	uint8_t lineXStart = 3, lineXEnd = 36;
+	uint8_t nameY = 14;
+	for (uint8_t y = 0; y < 30; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			// blue line
+			if (y == lineY && (x >= lineXStart && x <= lineXEnd))
+				reg_video_map[y * 40 + x] = 2;
+			
+			//C
+			if (x == 4 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if (y == nameY && (x == 5 || x == 6))
+				reg_video_map[y * 40 + x] = 7;
+			if (y == nameY + 4 && (x == 5 || x == 6))
+				reg_video_map[y * 40 + x] = 7;
+			//h
+			if (x == 8 && (y >= nameY && y <= nameY + 4) )
+				reg_video_map[y*40+x]=7;
+			if (y == nameY + 2 && (x == 9 || x == 10))
+				reg_video_map[y * 40 + x] = 7;
+			if (x == 10 && (y >= nameY + 2 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			// i 
+			if (x == 12 && (y >= nameY + 2 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if (x == 12 && y == nameY)
+				reg_video_map[y * 40 + x] = 7;
+			// l 
+			if (x == 14 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x]=7;
+			// i 
+			if (x == 16 && (y >= nameY + 2 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if (x == 16 && y == nameY)
+				reg_video_map[y * 40 + x] = 7;
+			// C 
+			if (x == 19 && (y >= nameY && y <= nameY + 4) )
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY && (x == 20 || x == 21))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY + 4 && (x == 20 || x == 21))
+				reg_video_map[y * 40 + x] = 2;
+			//H
+			if (x == 23 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY + 2 && (x == 24 || x == 25))
+				reg_video_map[y * 40 + x] = 2;
+			if (x == 25 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			// I
+			if (x == 27 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			// P
+			if (x == 29 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY && (x == 30 || x == 31))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY + 2 && (x == 30 || x == 31))
+				reg_video_map[y * 40 + x] = 2;
+			if (x == 31 && (y >= nameY && y <= nameY + 2))
+				reg_video_map[y * 40 + x] = 2;
+			
+			// S 
+			if (y == nameY && (x >= 33 && x <= 35 ))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY + 2 && (x >= 33 && x <= 35))
+				reg_video_map[y * 40 + x] = 2;
+			if (y == nameY + 4 && (x >= 33 && x <= 35))
+				reg_video_map[y * 40 + x] = 2;
+			if (x == 33 && y == nameY + 1)
+				reg_video_map[y * 40 + x] = 2;
+			if (x == 35 && y == nameY + 3)
+				reg_video_map[y * 40 + x] = 2;
+		}
+	}
 }
 
-void chars_init() {
+/* 
+ * brief   displays TETRISARAJ on the screen
+ * return  void
+ */
+void DisplayGameName() 
+{
+	uint8_t nameY = 22;
+	for (uint8_t y = 0; y < 30; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			//T
+			if(y == nameY && (x>=3 && x<=5))
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 4 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			 //E
+			if(x == 7 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 8 && (y == nameY || y == nameY + 2 || y == nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			 //T
+			if(y == nameY && (x >= 10 && x <= 12))
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 11 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			 // R
+			if(x == 14 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 15 && y== nameY)
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 16 && y == nameY + 1)
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 15 && y == nameY + 2)
+				reg_video_map[y * 40 + x] = 2;
+			if(x == 16 && (y == nameY + 3 || y == nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			// I
+			if(x == 18 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 2;
+			
+			// S
+			if(y == nameY && (x == 20 || x == 21))
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 20 && (y == nameY + 1 || y == nameY + 2 || y == nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 21 && (y >= nameY + 2 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			// A
+			if((x == 23 || x == 25) && (y >= nameY + 1 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 24 && y == nameY + 2)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 24 && y == nameY)
+				reg_video_map[y * 40 + x] = 7;
+			// R
+			if(x == 27 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 28 && y == nameY)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 29 && y == nameY + 1)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 28 && y == nameY + 2)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 29 && (y == nameY + 3 || y == nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			// A
+			if((x == 31 || x == 33) && (y >= nameY + 1 && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 32 && y == nameY + 2)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 32 && y == nameY)
+				reg_video_map[y * 40 + x] = 7;
+			// J
+			if(x == 37 && (y >= nameY && y <= nameY + 4))
+				reg_video_map[y * 40 + x] = 7;
+			if((x == 35 || x == 36) && y == nameY + 4)
+				reg_video_map[y * 40 + x] = 7;
+			if(x == 35 && y == nameY + 3)
+				reg_video_map[y * 40 + x] = 7; 
+		}
+	}
+}
+
+/* 
+ * brief   displays game over screen 
+ * return  void
+ */
+void DisplayGameOverScreen(void)
+{
+	uint8_t nameY = 9;
+	for (uint8_t y = 0; y < 23; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			reg_video_map[y * 40 + x] = 0;
+			
+			// Y
+			if ((y == nameY + 2 && (x >= 4 && x <= 6)) || (x == 5 && (y >= nameY + 2 && y <= nameY + 4)) || ((x == 4 || x == 6) && (y >= nameY && y <= nameY + 2)))
+				reg_video_map[y * 40 + x] = 3;
+			
+			// O
+			if (((y == nameY || y == nameY + 4) && (x >= 8 && x <= 10)) || ((x == 8 || x == 10) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// U
+			if ((y == nameY + 4 && (x >= 12 && x <= 14)) || ((x == 12 || x == 14) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// L
+			if ((y == nameY + 4 && (x >= 18 && x <= 20)) || (x == 18 && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// O
+			if (((y == nameY || y == nameY + 4) && (x >= 22 && x <= 24)) || ((x == 22 || x == 24) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// S
+			if (((y == nameY || y == nameY + 2 || y == nameY + 4) && (x >= 26 && x <= 28)) || (x == 26 && y == nameY + 1) ||(x == 28 && y == nameY + 3))
+				reg_video_map[y * 40 + x] = 3;
+			
+			// T
+			if ((y == nameY && (x >= 30 && x <= 32)) || (x == 31 && (y >= nameY && y <= nameY + 4)))
+				reg_video_map[y * 40 + x] = 3;
+			
+			// !
+			if ((x == 34 && (y >= nameY && y <= nameY + 2)) || (x == 34 && y == nameY + 4))
+				reg_video_map[y * 40 + x] = 3;
+		}
+	}
+}
+
+/* 
+ * brief   defines all characters that can be used
+ * return  void
+ */
+void CharactersInit() {
 	uint32_t pixel = 0x00000FFF;
-	for(int z=0; z<16; z++) {
-		for(int y=0; y<16; y++) {
-			for(int x=0; x<16; x++) {
-				if(z == 0) {
-					if(x==0 || x==15) pixel = 0x00000FF0;
-					else if (y==0 || y==15) pixel = 0x000000F0;
-					else pixel = 0x00000F00;				
-				} else if(z == 1) {
-					pixel = 0x000000F0;
-				} else if(z == 2) {
-					pixel = 0x0000000F;
-				} else if(z == 3) {
-					pixel = 0x00000AAA;
-				} else if(z == 4) {
-					pixel = 0x00000FF0;
-				} else if(z == 5) {
-					pixel = 0x000000FF;
-				} else if(z == 6) {
-					pixel = 0x00000F0F;
-				} else if(z == 7) {
-					pixel = 0x00000A00;		
-				} else if(z == 8) {
+	for(uint8_t z = 0; z < 16; z++) 
+	{
+		for(uint8_t y = 0; y < 16; y++) 
+		{
+			for(uint8_t x = 0; x < 16; x++) 
+			{
+				if(z == 0) // color black
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000222;
+					else if (x == 14 || x == 15) pixel = 0x00000111; 
+					else pixel = 0x00000000; 
+				} 
+				else if(z == 1) // color green
+				{  
+					if(y == 0 || y == 1) pixel = 0x00000080; 
+					else if (x == 14 || x == 15) pixel = 0x000000B0;
+					else pixel = 0x000008B4; 
+				} 
+				else if(z == 2) // color blue
+				{
+					if(y == 0 || y == 1) pixel = 0x0000000B;
+					else if (x == 14 || x == 15) pixel = 0x0000000B;
+					else pixel = 0x00000009; 
+				} 
+				else if(z == 3) // color red
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000A00;
+					else if (x == 14 || x == 15) pixel = 0x00000B00; 
+					else pixel = 0x00000F00; 
+				} 
+				else if(z == 4) // color yellow
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000FF8; 
+					else if (x == 14 || x == 15) pixel = 0x00000FF4; 
+					else pixel = 0x00000FF0; 
+				} 
+				else if(z == 5) // color purple
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000075D;
+					else if (x == 14 || x == 15) pixel = 0x00000074D; 
+					else pixel = 0x00000070D; 
+				} 
+				else if(z == 6) // color pink
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000FAF;
+					else if (x == 14 || x == 15) pixel = 0x00000F6F; 
+					else pixel = 0x00000F0F;
+				} 
+				else if(z == 7) // color orange
+				{ 
+					if(y == 0 || y == 1) pixel = 0x00000FB0; 
+					else if (x == 14 || x == 15) pixel = 0x00000F90;
+					else pixel = 0x00000FA0; 
+				} 
+				else if(z == 8)  // not used
+				{
 					pixel = 0x000000A0;		
-				} else if(z == 9) {
-					pixel = 0x0000000A;		
-				} else if(z == 10) {
+				} 
+				else if(z == 9) // color gray
+				{ 
+					if (x == 14 || x == 15) pixel = 0x00000CCC; // tamnija
+					else if(y == 0 || y == 1) pixel = 0x00000111; // svjetla 
+					else pixel = 0x00000AAA; // najtamnija	
+				} 
+				else if(z == 10) // not used
+				{	
 					pixel = 0x00000EEE;		
-				} else if(z == 11) {
+				} 
+				else if(z == 11) // not used
+				{
 					pixel = 0x00000AA0;		
-				} else if(z == 12) {
+				} 
+				else if(z == 12) // not used 
+				{
 					pixel = 0x000000AA;		
-				} else if(z == 13) {
+				} 
+				else if(z == 13) // not used 
+				{
 					pixel = 0x00000A0A;
-				} else if(z == 14) {
-					pixel = 0x00000FFF;					
-				} else {
+				} 
+				else if(z == 14) // not used 
+				{
+					pixel = 0x00000FFF; 				
+				} 
+				else 
+				{
 					pixel = 0x00000000;
 				}
-				reg_video_char[z*256+y*16+x] = pixel;
+				reg_video_char[z * 256 + y * 16 + x] = pixel;
 			}
 		}	
 	}
 }
 
-void delay_ms(int msec) {
-	for(int i=0; i<msec; i++) {
-		delay = 0;
-		while (delay < DELAY) {
-			delay = delay + 1;
-		}
-	}
-}
-// Dodajemo nas dio 
-uint8_t tetromino[7][16]={{0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0},
-					      {0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0},
-					      {0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},
-						  {0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0},
-						  {0,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0},
-						  {0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,0},
-						  {0,0,1,0,0,0,1,0,0,1,1,0,0,0,0,0}};
-						  
-
-
-int Rotate(int px, int py, int r)
+/* 
+ * brief   handles the rotation of the piece
+ * return  index of the rotated piece
+ */
+int Rotate(int x, int y, int r)
 {
     int pi = 0;
     switch (r % 4)
     {
         case 0: // 0 degrees			// 0  1  2  3
-            pi = py * 4 + px;			// 4  5  6  7
+            pi = y * 4 + x;			// 4  5  6  7
             break;						// 8  9 10 11
             //12 13 14 15
 
         case 1: // 90 degrees			//12  8  4  0
-            pi = 12 + py - (px * 4);	//13  9  5  1
+            pi = 12 + y - (x * 4);	//13  9  5  1
             break;						//14 10  6  2
             //15 11  7  3
 
         case 2: // 180 degrees			//15 14 13 12
-            pi = 15 - (py * 4) - px;	//11 10  9  8
+            pi = 15 - (y * 4) - x;	//11 10  9  8
             break;						// 7  6  5  4
             // 3  2  1  0
 
         case 3: // 270 degrees			// 3  7 11 15
-            pi = 3 - py + (px * 4);		// 2  6 10 14
+            pi = 3 - y + (x * 4);		// 2  6 10 14
             break;						// 1  5  9 13
-    }								// 0  4  8 12
+    }									// 0  4  8 12
 
     return pi;
 }
 
-bool DoesPieceFit(uint8_t nTetromino, uint8_t nRotation, uint8_t nPosX, uint8_t nPosY)
+/* 
+ * brief   checks if the piece can be moved to a specified position
+ * return  true if the piece can fit and false otherwise
+ */
+bool DoesPieceFit(int tetrominosIndex, int nRotation, int nPosX, int nPosY)
 {
     // All Field cells >0 are occupied
-    for (uint8_t px = 0; px < 4; px++)
-        for (uint8_t py = 0; py < 4; py++)
+    for (int x = 0; x < 4; x++)
+        for (int y = 0; y < 4; y++)
         {
             // Get index into piece
-            uint8_t pi = Rotate(px, py, nRotation);
+            int pi = Rotate(x, y, nRotation);
 
             // Get index into field
-            uint16_t fi = (nPosY + py) * nFieldWidth + (nPosX + px);
+            int fi = (nPosY + y) * fieldWidth + (nPosX + x);
 
             // Check that test is in bounds. Note out of bounds does
             // not necessarily mean a fail, as the long vertical piece
             // can have cells that lie outside the boundary, so we'll
             // just ignore them
-            if (nPosX + px >= 0 && nPosX + px < nFieldWidth)
+            if (nPosX + x >= 0 && nPosX + x < fieldWidth)
             {
-                if (nPosY + py >= 0 && nPosY + py < nFieldHeight)
+                if (nPosY + y >= 0 && nPosY + y < fieldHeight)
                 {
                     // In Bounds so do collision check
-                    if (tetromino[nTetromino][pi] != 0 && pField[fi] != 0)
+                    if ((tetrominoes[tetrominosIndex][pi] != 0 && field[fi] != 0) /* || (tetrominoes[ntetrominoes][pi] != 0 && (nPosY+y)==0) */) // dodali smo || ....
                         return false; // fail on first hit
                 }
             }
@@ -207,295 +508,499 @@ bool DoesPieceFit(uint8_t nTetromino, uint8_t nRotation, uint8_t nPosX, uint8_t 
     return true;
 }
 
+/* 
+ * brief   displays a digit on specified location
+ * return  void
+ */
+void DrawDigit(int number, int startX, int startY)
+{
+	for (uint8_t y = startY; y < startY + 5; y++)
+	{ 
+		for (uint8_t x = startX; x < startX + 3; x++) 
+		{
+			switch (number)
+			{
+				case 0:
+					if (x == startX || x == startX + 2 || y == startY || y == startY + 4)
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 1:
+					if (x == startX + 2 || y == startY + 1)
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 2:
+					if (y == startY || y == startY + 2 || y == startY + 4 || (y == startY + 1 && x == startX + 2) || (y == startY + 3 && x == startX))
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 3:
+					if (x == startX + 2 || y == startY || y == startY + 2 ||y == startY + 4)
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 4:
+					if (x == startX + 2 || y == startY + 2 || (y <= startY + 2 && x == startX))
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 5:
+					if (y == startY || y == startY + 2 || y == startY + 4 || (y == startY + 1 && x == startX) || (y == startY + 3 && x == startX + 2))
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 6:
+					if (x == startX || y == startY || y == startY + 2 || y == startY + 4 || (y == startY + 3 && x == startX + 2))
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 7:
+					if (x == startX + 2 || y == startY)
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 8:
+					if (x == startX || x == startX + 2 || y == startY || y == startY + 2 || y == startY + 4)
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				case 9:
+					if (x == startX + 2 || y == startY || y == startY + 2 || y == startY + 4 || (y == startY + 1 && x == startX))
+						field[y * fieldWidth + x] = 0;
+					else
+						field[y * fieldWidth + x] = 9;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}
 
+/* 
+ * brief   displays the current player score
+ * return  void
+ */
+void DisplayScore(int score, int startX, int startY)
+{
+	int digits[4] = {0,0,0,0};
+	int i = 0;
+	while (score != 0)
+	{
+		digits[i++] = score % 10;
+		score /= 10;
+	}
+	
+	for (i = 3; i >= 0; i--)
+	{
+		DrawDigit(digits[i], startX + (3 - i)*4, startY);
+	}
+}
+
+/* 
+ * brief   displays the word score on the screen
+ * return  void
+ */
+void WriteScore() 
+{
+	for (uint8_t y = 24; y < 29; y++) {
+		for (uint8_t x = 3; x < 21; x++) {
+			if (x == 3 || x == 4) // letter S
+			{
+				if (y == 24 || y == 26 || y == 28 || (x == 3 && y == 25) || (x == 4 && y == 27))
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+			else if (x == 6 || x == 7) // letter C
+			{
+				if (x == 6 || y == 24 || y == 28)
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+			else if (x == 9 || x == 10 || x == 11) // letter O
+			{
+				if (x == 9 || x == 11 || y == 24 || y == 28)
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+			else if (x == 13 || x == 14 || x == 15) // letter R
+			{
+				if (x == 13 || (x == 14 && (y == 24 || y == 26)) || (x == 15 && (y == 25 || y > 26)))
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+			else if (x == 17 || x == 18) // letter E
+			{
+				if (x == 17 || (x == 18 && y % 2 == 0))
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+			else if (x == 20) // colon
+			{
+				if (y == 25 || y == 27)
+					field[y * fieldWidth + x] = 0;
+				else 
+					field[y * fieldWidth + x] = 9;
+			}
+		}
+	}
+	
+	DisplayScore(0, 22, 24);
+}
+
+/* 
+ * brief   delay function, u32_delay = 40000 -> approx. 5 seconds
+ * return  void
+ */
+static inline void _delay(uint32_t u32_delay)
+{ 
+	uint16_t local = 0;
+	for (uint32_t i = 0u; i<u32_delay; i++)
+	{
+		print("_delay called");
+		if (i % 2 == 0) local++;
+	}
+}
+
+unsigned int xorshift32(unsigned int *state) {
+    unsigned int x = *state;
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+    *state = x;
+    return x & 1;
+}
+
+
+int generateRandomBinary() {
+    static unsigned int state = 123456789;  
+    return xorshift32(&state);
+}
+int generateRandomNumber(int min, int max) {
+    static unsigned int state = 123456789; 
+    unsigned int range = max - min + 1;
+    unsigned int randomValue = xorshift32(&state) % range + min;
+    return randomValue;
+}
 void main()
 {
     reg_uart_clkdiv = 217; // 100 MHz / 460800 baud
     print("TetriSaraj!\n");
-	
-	bool btnR = false, btnD = false, btnC = false, btnU = false, btnL = false;		
-	bool videoOn = false, vsync = false, hsync = false;	
-	bool tick = false;
-	uint32_t tick_counter = 0;	
+
+	bool rightButton = false, downButton = false, centerButton = false, upButton = false, leftButton = false;	
 	
 	reg_gpio = 0x0;	
-	chars_init();	
-	delay_ms(10); 	
-	board_init();		
-	delay_ms(10);	
 	
-		//  Kreiranje polja - inicijalne varijable 
-	for (int y = 0; y < nFieldHeight; y++) 
-	 for (int x = 0; x < nFieldWidth; x++) // Board Boundary
-            pField[y * nFieldWidth + x] = (y == 1 ||
-                                           y == nFieldHeight - 1 ||
-                                           x + 1 == nFieldWidth / 2 ||
-                                           x == nFieldWidth / 2 ) ? 9u : 0u;
+	CharactersInit();
+	DisplayProjectName();
+	_delay(20000);
 
-    // Game Logic
+	DisplayCompanyName(); 
+	_delay(20000);
+	
+	DisplayGameName();
+	_delay(20000);
 	
 	
-    uint16_t nCurrentPiece = 0;
-    uint8_t nCurrentRotation = 3;
-    uint8_t nCurrentX = 0;
-    uint8_t nCurrentY = nFieldHeight / 2;
-    uint8_t nSpeed = 20;
-    uint8_t nSpeedCount = 0;
-    bool bForceDown = false;
-    bool bRotateHold = true;
-    uint16_t nPieceCount = 0;
-    uint16_t nScore = 0;
-
-    uint8_t arrayLines[4]={0,0,0,0};
-    uint8_t counter=0;
-    bool bGameOver = false;
-    uint8_t previousSide=0;
-
-    uint8_t randomSideGenerator = 0;  // left - 0, right - 1
-	// Kraj - kreiranje polja - inicijalne varijable
-	
-	int brojac=0;
-	
-	while (1) {
-		delay--;
-		get_input();
-         if(delay == 0) {
-			tick = !tick;			
-			delay = DELAY;
+	// Field initialization
+	for (uint8_t y = 0; y < fieldHeight; y++) 
+	{
+		for (uint8_t x = 0; x < fieldWidth; x++)
+		{			
+			field[y * fieldWidth + x] = (y == 0 ||
+                                           y >= fieldHeight - 7 ||
+                                           x + 1 == fieldWidth / 2 ||
+                                           x == fieldWidth / 2 ) ? 9u : 0u;
 		}
-		 
+	}
+	WriteScore();
+	
+    // Game Logic
+    uint16_t pieceIndex = 0;
+    uint8_t pieceRotation = 3;
+    uint8_t pieceXCoordinate = 0;
+    uint8_t pieceYCoordinate = fieldHeight / 2;
+	
+    uint8_t speed = 20;
+    uint8_t gameTicksCount = 0;
+    bool movePiece = false;
+    bool rotationFlag = true;
+	
+    uint16_t pieceCount = 0;
+    uint16_t score = 0;
+
+    uint8_t linesXCoordinates[4] = {0, 0, 0, 0};
+    uint8_t linesCount = 0;
+    bool isGameOver = false;
+    uint8_t previousSide = 0;
+	bool hasScoreChanged = false;
+	
+    uint8_t randomSideGenerator = 0;  // left - 0, right - 1
+
+	while (1) {
+
+		if (isGameOver)
+		{
+			DisplayGameOverScreen();
+			while (!(buttons & BUTTON_CENTER))
+			{
+				// Press center button to restart the game
+				GetButtonStates();
+			}
+			//upButton = true;
+			for (uint8_t y = 0; y < fieldHeight; y++) 
+			{
+				for (uint8_t x = 0; x < fieldWidth; x++)
+				{
+					field[y * fieldWidth + x] = (y == 0 ||
+									   y >= fieldHeight - 7 ||
+									   x + 1 == fieldWidth / 2 ||
+									   x == fieldWidth / 2 ) ? 9u : 0u;
+				}
+			}
+			score=0;
+			isGameOver=false;
+			WriteScore();
+		}
+		delay--;
+				
+		GetButtonStates();
 		
-	/* 	if (buttons & BUTTON_UP){			
+		if (buttons & BUTTON_UP)
+		{
+			upButton = true;
 			print("BUTTON_UP\n");
 		}	
-		if (buttons & BUTTON_DOWN){
-			
+		if (buttons & BUTTON_DOWN)
+		{
+			downButton = true;			
 			print("BUTTON_DOWN\n");
 		}		
-		if (buttons & BUTTON_RIGHT){
-			
+		if (buttons & BUTTON_RIGHT)
+		{
+			rightButton = true;			
 			print("BUTTON_RIGHT\n");
 		}
-		if (buttons & BUTTON_LEFT) {			
+		if (buttons & BUTTON_LEFT) 
+		{
+			leftButton = true;			
 			print("BUTTON_LEFT\n");
 		}
-		if (buttons & BUTTON_CENTER){
+		if (buttons & BUTTON_CENTER)
+		{
+			centerButton = true;			
 			print("BUTTON_CENTER\n");
-		}*/
-		
-		// POCETAK random crtanje //
-		// Ovo samo koristimo za random crtanje u svrhu testiranja- nema veze sa logikom igre//
-/*          for (int y = 0; y < nFieldHeight; y++) {
-            for (int x = 0; x < nFieldWidth; x++) {
-                if (y == 9) // Black color
-					reg_video_map[y*nFieldWidth + x] = brojac;
-				else if (y == 0) // White color
-					reg_video_map[y*nFieldWidth + x] = 14;
-				else // Green color
-					reg_video_map[y*nFieldWidth + x] = 1;
-			}
-		}  
-		
-		
-		reg_video_map[15*40+20] = 0; // O is ID Red Mega_Character */
-		// KRAJ  random crtanje //
-		
-		// Nas dio koda 
-		  // Timing =======================
-        //delay_ms(50); // Small Step = 1 Game Tick, // ovaj delay_ms se koristio u igri kad smo testirali kroz terminal
-        nSpeedCount++;
-        bForceDown = (nSpeedCount == nSpeed);
-
-
-        // Game Logic ===================
-
-        // Handle player movement
-        if (!randomSideGenerator) {
-            nCurrentY += ((buttons & BUTTON_RIGHT) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1)) ? 1 : 0;
-            nCurrentY -= ((buttons & BUTTON_LEFT) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY - 1)) ? 1 : 0;
-            nCurrentX += ((buttons & BUTTON_DOWN) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY)) ? 1 : 0;
-        }
-        else {
-            nCurrentY -= ((buttons & BUTTON_RIGHT) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY - 1)) ? 1 : 0;
-            nCurrentY += ((buttons & BUTTON_LEFT) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY + 1)) ? 1 : 0;
-            nCurrentX -= ((buttons & BUTTON_DOWN) && DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY)) ? 1 : 0;
-        }
-
-        // Rotate, but latch to stop wild spinning
-        if (buttons & BUTTON_CENTER)
-        {
-            nCurrentRotation += (bRotateHold && DoesPieceFit(nCurrentPiece, nCurrentRotation + 1, nCurrentX, nCurrentY)) ? 1 : 0;
-            bRotateHold = false;
-        }
-        else
-            bRotateHold = true;
-		
-		// koristeno samo za random crtanje da se ustanovi period signala bForceDown
-		if(bForceDown){
-			brojac=brojac+1;
-			if(brojac==14)
-				brojac=0;
 		}
-
-        // Force the piece down the playfield if it's time
-         if (bForceDown)
-        {
-            // Update difficulty every 50 pieces
-            nSpeedCount = 0;
-            nPieceCount++;
-            // if (nPieceCount % 50 == 0)
-              //  if (nSpeed >= 10) nSpeed--; 
-
-            // Test if piece can be moved down
-            if (DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX + 1, nCurrentY) && !randomSideGenerator)
-                nCurrentX++;
-            else if (DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX - 1, nCurrentY) && randomSideGenerator)
-                nCurrentX--;
-            else
-            {
-                // It can't! Lock the piece in place
-                for (int px = 0; px < 4; px++)
-                    for (int py = 0; py < 4; py++)
-                        if (tetromino[nCurrentPiece][Rotate(px, py, nCurrentRotation)] != 0)
-                            pField[(nCurrentY + py) * nFieldWidth + (nCurrentX + px)] = nCurrentPiece + 1;
+		reg_gpio = 0x00000100 | buttons; // first 9 leds				
+			
+			
+		// Game Logic
+		if (delay == 0)
+		{	
+			delay = DELAY;			
+			gameTicksCount++;
+			movePiece = (gameTicksCount == speed);			
 
 
-                // Check for lines
-                for (int px = 0; px < 4; px++)
-                {
-                    bool bLine = true;
-                    for (int py = 1; py < nFieldHeight - 1; py++)
-                        if (pField[(nCurrentX+px)+nFieldWidth*py] == 0 || pField[(nCurrentX+px)+nFieldWidth*py] == 9u) {
-                            bLine = false;
-                            break;
-                        }
-
-
-                    if (bLine)
-                    {
-                        // Remove Line, set to =
-                        for (int py = 1; py < nFieldHeight - 1; py++){
-                            pField[(nCurrentX+px)+nFieldWidth*py] = 0;
-                        }
-                        arrayLines[counter] = nCurrentX + px;
-                        counter+=1;
-                    }
-
-
-                }
-                previousSide = randomSideGenerator;
-
-                nScore += 5;
-                if(counter != 0)	nScore += (1 << counter) * 20;
-
-                // Pick New Piece
-
-                nCurrentY = nFieldHeight / 2;
-                randomSideGenerator = 0;
-                if (!randomSideGenerator) {
-                    nCurrentRotation = 3;
-                    nCurrentX = 0;
-                }
-                else {
-                    nCurrentRotation = 1;
-                    nCurrentX = nFieldWidth - 4;
-                }
-
-                nCurrentPiece = 1;
-
-                // If piece does not fit straight away, game over!
-                bGameOver = !DoesPieceFit(nCurrentPiece, nCurrentRotation, nCurrentX, nCurrentY);
-            }
-        } 
-
-        // Display ======================
-
-
-        // Draw Field
-         for (int y = 0; y < nFieldHeight; y++) {
-            for (int x = 0; x < nFieldWidth; x++) {
-				uint8_t block = pField[y*nFieldWidth + x];
-                if (block == 9) // Black color
-					reg_video_map[y*nFieldWidth + x] = 13;
-				else if (block == 0) // White color
-					reg_video_map[y*nFieldWidth + x] = 14;
-				else // Green color
-					reg_video_map[y*nFieldWidth + x] = 1;
+		 	// Player input handling
+			if (!randomSideGenerator) // left part of the screen
+			{
+				pieceYCoordinate += (downButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate + 1)) ? 1 : 0;
+				pieceYCoordinate -= (upButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate - 1)) ? 1 : 0;
+				pieceXCoordinate += (rightButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate + 1, pieceYCoordinate)) ? 1 : 0;
 			}
-		} 
+			else // right part of the screen
+			{ 
+				pieceYCoordinate -= (upButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate - 1)) ? 1 : 0;
+				pieceYCoordinate += (downButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate + 1)) ? 1 : 0;
+				pieceXCoordinate -= (leftButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate - 1, pieceYCoordinate)) ? 1 : 0;
+			} 
 
-        // Draw Current Piece
-          for (int px = 0; px < 4; px++)
-            for (int py = 0; py < 4; py++)
-                if (tetromino[nCurrentPiece][Rotate(px, py, nCurrentRotation)] != 0)
-					reg_video_map[(nCurrentY + py)*nFieldWidth + (nCurrentX + px)] = 1;  
-                    
-
-        // Draw Score
-        //swprintf_s(&screen[2 * nScreenWidth + nFieldWidth + 6], 16, L"SCORE: %8d", nScore);
-
-
-        // Animate Line Completion
-        if (counter != 0)
-        {
-            // Display Frame (cheekily to draw lines)
-            //WriteConsoleOutputCharacterW(hConsole, screen, nScreenWidth * nScreenHeight, {0, 0 }, &dwBytesWritten);
-            //delay_ms(400); // Delay a bit
-
-            if (previousSide == 0){
-                for (int v = 0; v < counter; v++) {
-
-
-                    for (int px = arrayLines[v]; px > 0; px--) {
-                        for (int py = 1; py < nFieldHeight - 1; py++)
-                            pField[px + nFieldWidth * py] = pField[px - 1 + nFieldWidth * py];
-
-                    }
-                }
-            } else{
-                for (int v = counter - 1; v >= 0; v--)
-                {
-                    for (int px = arrayLines[v]; px < nFieldWidth - 1; px++)
-                    {
-                        for (int py = 1; py < nFieldHeight - 1; py++) {
-
-                            pField[px + nFieldWidth * py] = pField[px + 1 + nFieldWidth * py];
-
-                        }
-                    }
-                }
-
-            }
-
-            arrayLines[0]=0;
-            arrayLines[1]=0;
-            arrayLines[2]=0;
-            arrayLines[3]=0;
-
-            counter=0; 
-
-			// Kraj - nas dio koda 
+			if (centerButton)
+			{
+				pieceRotation += (rotationFlag && DoesPieceFit(pieceIndex, pieceRotation + 1, pieceXCoordinate, pieceYCoordinate)) ? 1 : 0;
+				rotationFlag = false;
+			}
+			else
+				rotationFlag = true;
 		
+			// Move the piece "down" the playfield if it's time
+			if (movePiece)
+			{
+				// Update difficulty every 50 pieces
+				gameTicksCount = 0;
+				pieceCount++;
+				 if (pieceCount % 50 == 0)
+					if (speed >= 10) speed--; 
 
-		
+				// Test if piece can be moved down
+				if (DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate + 1, pieceYCoordinate) && !randomSideGenerator)
+				{
+					pieceXCoordinate++;
+				}
+				else if (DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate - 1, pieceYCoordinate) && randomSideGenerator)
+				{
+					pieceXCoordinate--;
+				}
+				else
+				{
+					// Lock the piece in place
+					for (int x = 0; x < 4; x++)
+					{	
+						for (int y = 0; y < 4; y++)
+						{
+							if (tetrominoes[pieceIndex][Rotate(x, y, pieceRotation)] != 0)
+							{
+								field[(pieceYCoordinate + y) * fieldWidth + (pieceXCoordinate + x)] = pieceIndex + 1;
+							}
+						}
+					}
+
+					// Check if any lines formed
+					for (int x = 0; x < 4; x++)
+					{
+						bool bLine = true;
+						for (int y = 1; y < fieldHeight - 7; y++)
+						{
+							if (field[(pieceXCoordinate + x) + fieldWidth * y] == 0 || field[(pieceXCoordinate + x) + fieldWidth * y] == 9u) 
+							{
+								bLine = false;
+								break;
+							}
+						}
+
+						if (bLine)
+						{
+							// Remove the line
+							for (int y = 1; y < fieldHeight - 7; y++)
+							{
+								field[(pieceXCoordinate + x) + fieldWidth * y] = 0;
+							}
+							
+							// Remember the coordinates of the removed line
+							linesXCoordinates[linesCount] = pieceXCoordinate + x;
+							linesCount++;
+						}
+					}
+					previousSide = randomSideGenerator;
+
+					// Score handling
+					score += 1;
+					if (linesCount != 0) score += (1 << linesCount) * 20;
+					hasScoreChanged = true;
+					
+					// Generate new piece
+					pieceYCoordinate = ((fieldHeight - 7) / 2);
+					
+					
+					randomSideGenerator= generateRandomBinary();
+
+					if (!randomSideGenerator) 
+					{
+						pieceRotation = 3;
+						pieceXCoordinate = 0;
+					}
+					else 
+					{
+						pieceRotation = 1;
+						pieceXCoordinate = fieldWidth - 4;
+					}
+
+					pieceIndex = pieceCount % 7;
+
+					// Game is over if the piece doesn't fit at the beginning
+					isGameOver = !DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate);
+				}
+			}
+
+			// Rendering part
+			if (hasScoreChanged)
+			{
+				hasScoreChanged = false;
+				DisplayScore(score, 22, 24);
+			}
+
+			// Display the current field state
+			 for (int y = 0; y < fieldHeight; y++) 
+			 {
+				for (int x = 0; x < fieldWidth; x++) 
+				{
+					reg_video_map[y * fieldWidth + x] = field[y * fieldWidth + x];
+				}
+			}
+
+			// Display the current piece on the field
+			for (int x = 0; x < 4; x++)
+			{
+				for (int y = 0; y < 4; y++)
+				{
+					if (tetrominoes[pieceIndex][Rotate(x, y, pieceRotation)] != 0)
+					{
+						reg_video_map[(pieceYCoordinate + y) * fieldWidth + (pieceXCoordinate + x)] = pieceIndex + 1; 
+					}
+				}
+			 }		
+
+			// Handle the lines removal
+			if (linesCount != 0)
+			{
+				if (previousSide == 0)
+				{
+					for (uint8_t v = 0; v < linesCount; v++) 
+					{
+						for (uint8_t x = linesXCoordinates[v]; x > 0; x--) 
+						{
+							for (uint8_t y = 1; y < fieldHeight - 7; y++)
+							{
+								field[x + fieldWidth * y] = field[x - 1 + fieldWidth * y];
+							}
+						}
+					}
+				} 
+				else
+				{
+					for (uint8_t v = linesCount; v > 0; v--)
+					{
+						for (uint8_t x = linesXCoordinates[v - 1]; x < fieldWidth - 1; x++)
+						{
+							for (uint8_t y = 1; y < fieldHeight - 7; y++) 
+							{
+								field[x + fieldWidth * y] = field[x + 1 + fieldWidth * y];
+							}
+						}
+					}
+
+				}
+				
+				// clear the coordinates array
+				linesXCoordinates[0] = 0;
+				linesXCoordinates[1] = 0;
+				linesXCoordinates[2] = 0;
+				linesXCoordinates[3] = 0;
+				linesCount = 0;		
+			}
+
+			rightButton = false;
+			downButton = false;
+			centerButton = false;
+			upButton = false;
+			leftButton = false;		
 		}
-		
-
-		btnU = buttons&BUTTON_UP;			
-		btnR = buttons&BUTTON_RIGHT;
-		btnL = buttons&BUTTON_LEFT;	
-		btnD = buttons&BUTTON_DOWN;
-		btnC = buttons&BUTTON_CENTER;
-		reg_gpio = 0x00000100 | buttons; // first 9 leds			
-		
-		videoOn = buttons&0x0020;
-		vsync = buttons&0x0040;
-		hsync = buttons&0x0080;
-			
-			
-			
-	
-
 	}
 }
 

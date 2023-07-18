@@ -1,7 +1,8 @@
+
 MEMORY
 {
     FLASH (rx)      : ORIGIN = 0x00100000, LENGTH = 0x400000 /* entire flash, 4 MiB */
-    RAM (xrw)       : ORIGIN = 0x00000000, LENGTH = 0x4000 /* 4 KB , zamijenio 4kb sa 16kb 0x2000->0x4000*/
+    RAM (xrw)       : ORIGIN = 0x00000000, LENGTH = 0x8000 /* 32 KB */
 }
 
 SECTIONS {
