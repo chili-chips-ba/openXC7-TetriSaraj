@@ -126,11 +126,23 @@ The image illustrating the screen organization is showed below.
 **<h3> Memory map </h3>**
 One of the first steps involves creating a memory map that governs the interaction between the CPU software and the hardware responsible for rendering the 40x30 = 1200 elements on the screen. This memory map can be viewed as the Instruction Set Architecture (ISA) of our graphic mini-controller, serving as a contract or interface between the software and hardware components.
 
-In this context, each element on the screen requires 4 bits of memory, while the CPU operates on a 32-bit architecture. Consequently, one CPU word can accommodate 8 elements. To represent a single line on the screen, we would need 5 such CPU words, as each line consists of 40 elements. Extrapolating this further, considering the entire screen, which comprises 30 lines, we would require a total of 5x30 = 150 CPU words to store the graphical information for the entire display.
+The memory map for the _character frame buffer_ (CFB) stores information about the screen display. As already mentioned, there are 1200 elements on the screen filled with user-created characters. The Character Set consists of 16 unique, fully programmable characters. In this context, each element on the screen requires 4 bits of memory. The 4-bit code in the CFB is the ID of the character to show on the corresponding XY location.  
 
-By organizing the memory in this manner and establishing the memory map, we enable effective communication between the CPU software and the hardware, facilitating the rendering of graphics on the screen. This approach ensures efficient utilization of memory and allows the CPU to access and manipulate the graphical data in a structured and predictable manner, thereby enabling smooth and controlled display updates.
+By organizing the memory in this manner and establishing the memory map, we enable effective communication between the CPU software and the hardware, facilitating the rendering of graphics on the screen. This approach allows the CPU to access and manipulate the graphical data in a structured and predictable manner, thereby enabling smooth and controlled display updates.
 
-![cfb memory](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/41f832c8-d255-4cda-9bbf-6e44ffb6d460)
+![Memory map - CFB](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/ab73accd-ec38-471c-be1b-6f2b5f04d2b4)
+
+When creating characters, the goal is to be able to color each individual pixel in any color. In this regard, a memory map for the _character set_ has been created, implemented in a way that utilizes only the lower 12 bits of a 32-bit word.
+
+The main reason for using such memory maps for character set and CFB is the simplification of indexing during memory writing.
+
+The memory map for the _character set_ is shown below.
+![Memory map - CS](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/d4965765-c667-4c9e-bd89-e08ada5c9ad8)
+
+
+
+
+
 
 
 
