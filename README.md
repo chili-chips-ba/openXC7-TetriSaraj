@@ -140,8 +140,36 @@ The memory map for the _character set_ is shown below.
 ![Memory map - CS](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/127020599/d4965765-c667-4c9e-bd89-e08ada5c9ad8)
 
 
+**<h3> From HDL to Bitstream: Unraveling the FPGA Design Journey </h3>**
 
+In the realm of FPGA design, a fascinating journey begins with a high-level Hardware Description Language (HDL) code, such as Verilog or VHDL. This code serves as the blueprint for the intended functionality to be implemented on the Field-Programmable Gate Array (FPGA) chip. However, transforming this HDL code into an operational FPGA design involves a complex process known as the "FPGA Build Process."
 
+Embark on the FPGA design adventure, from HDL to Bitstream, and witness the transformation of abstract concepts into real-world hardware marvels. Explore the intricacies of the FPGA Build Process, where innovation meets technology to bring imaginative designs to life!
+
+The FPGA Build Process entails several critical stages that pave the way for the successful realization of the desired hardware functionality. Let's explore the main steps along this intriguing journey:
+
+- Synthesis: At the outset, the HDL code undergoes synthesis, where it is translated into a logical netlist comprising gates and flip-flops. This netlist serves as an intermediary representation of the design before it is mapped to the FPGA's specific resources.
+
+- Implementation: The next step is implementation, wherein the logical netlist is efficiently mapped onto the available resources of the target FPGA. This process involves strategically placing logic elements on the FPGA's programmable fabric and establishing optimized interconnections.
+
+- JSON and Frames Generation: After a successful implementation, the design is captured in two essential files: the JSON file, representing a hierarchical description of the FPGA design in JSON format, and the Frames file, containing information about the placement and configuration of "frames" within the FPGA network.
+
+- .FASM File Generation (Optional): If needed, an additional .fasm file is generated, revealing the specific arrangement of logical elements on the FPGA chip.
+
+- Bitstream Generation: The most crucial stage arrives when the Bitstream file is created. This binary file holds the key to configuring the FPGA chip to operate as intended, encompassing critical information about logic elements, interconnections, and configurations.
+
+- FPGA Chip Programming: Armed with the Bitstream file, the FPGA chip can now be programmed. The Bitstream serves as the "genetic code" that configures the FPGA's hardware, endowing it with the functionalities specified in the original HDL code.
+
+With this process complete, the FPGA design journey comes full circle. The once ethereal HDL code is now a tangible and functional FPGA configuration, unleashing the power of reconfigurability and adaptability that these programmable devices offer.
+
+**<h3> FPGA Build Process </h3>**
+The tool required for the FPGA build process can be downloaded from the link: https://github.com/openXC7/toolchain-installer
+
+The "openXC7/toolchain-installer" is a GitHub repository that offers a convenient and automated solution for installing the toolchain required for Xilinx 7-series FPGA development. This toolchain installer is designed to streamline the setup process and facilitate FPGA design projects. The installation of tools consists of just **one command**! To use these tools, Linux with the **Ubuntu** distribution is required.
+
+If you are not using a Linux system with the **Ubuntu** distribution on your computer, we recommend using Windows Subsystem for Linux as an alternative solution.
+
+Repository contains scripts and configuration files that fetch and install the necessary tools, such as synthesis tools, simulation tools, and programming utilities. By automating the installation process, developers can save time and effort, ensuring a smoother and more consistent toolchain setup across different development environments.
 
 
 
