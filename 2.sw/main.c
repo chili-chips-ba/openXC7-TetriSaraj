@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <string.h>
+//#include <string.h>
 #include "uart.h"
 
 #define RAM_TOTAL 0x2000 // 8 KB
