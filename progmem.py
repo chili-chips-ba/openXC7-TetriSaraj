@@ -1,17 +1,23 @@
 
+import os
 import sys
 import struct
+
+relative_path = '2.sw/main.bin'
+
+absolute_path = os.path.join(os.path.dirname(__file__), relative_path)
 
 progmem_text = ''
 
 try:
-    with open('main.bin', 'rb') as bin_file:
+    with open(absolute_path, 'rb') as bin_file:
         bin_contents = bin_file.read()
 except Exception as e:
     print(f"Open bin file Exception: {e}")
     sys.exit(-1)
 
 print(f"Bin file size: {len(bin_contents)} bytes")
+
 
 hex_values = []
 while len(bin_contents) != 0:
