@@ -58,7 +58,6 @@ CFLAGS=
 
 
 
-# Generiranje HEX i BIN fajlova
 hex: $(SW_DIR)/main.elf
 	$(CROSS)objcopy -O verilog $< $(SW_DIR)/main.hex
 
@@ -66,11 +65,9 @@ firmware: $(SW_DIR)/main.elf
 	$(CROSS)objcopy -O binary $< $(SW_DIR)/main.bin
 	python progmem.py
 
-# Kompilacija izvornih fajlova u main.elf
 $(SW_DIR)/main.elf: $(SW_DIR)/main.lds $(SW_DIR)/start.s $(SW_DIR)/main.c $(SW_DIR)/uart.c $(SW_DIR)/uart.h
 	$(CROSS)gcc $(CFLAGS) -march=rv32im -mabi=ilp32 -Wl,--build-id=none,-Bstatic,-T,$(SW_DIR)/main.lds,-Map,$(SW_DIR)/main.map,--strip-debug -ffreestanding -nostdlib -o $@ $(SW_DIR)/start.s $(SW_DIR)/main.c $(SW_DIR)/uart.c
 
-# Generiranje main.lds iz sections.lds
 $(SW_DIR)/main.lds: $(SW_DIR)/sections.lds
 	$(CROSS)cpp -P -o $@ $<
 
