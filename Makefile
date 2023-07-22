@@ -84,4 +84,4 @@ clean_fw:
 	rm -f $(CURR_DIR)/2.sw/main.bin
 	rm -f progmem.v
 	rm -f firmware.hex
-	rm -f main.hex
+	rm -f $(CURR_DIR)/2.sw/main.hex
