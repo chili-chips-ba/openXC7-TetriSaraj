@@ -167,10 +167,25 @@ The tool required for the FPGA build process can be downloaded from the link: ht
 
 The "openXC7/toolchain-installer" is a GitHub repository that offers a convenient and automated solution for installing the toolchain required for Xilinx 7-series FPGA development. This toolchain installer is designed to streamline the setup process and facilitate FPGA design projects. The installation of tools consists of just **one command**! To use these tools, Linux with the **Ubuntu** distribution is required.
 
-If you are not using a Linux system with the **Ubuntu** distribution on your computer, we recommend using Windows Subsystem for Linux as an alternative solution.
+If you are not using a Linux system with the **Ubuntu** distribution on your computer, we recommend using Windows Subsystem for Linux (WSL) as an alternative solution.
 
 Repository contains scripts and configuration files that fetch and install the necessary tools, such as synthesis tools, simulation tools, and programming utilities. By automating the installation process, developers can save time and effort, ensuring a smoother and more consistent toolchain setup across different development environments.
 
+**<h3> Linux Environment Setup and .hex File Generation </h3>**
+In order to generate the _.hex_ file, you need to have a Linux system with Ubuntu/Debian distribution and the **Python** package installed. To prepare the environment for this process, follow these steps:
 
+- Download the project from GitHub and copy it to the desired folder. If you are using WSL, grant permissions to the subfolder where you want to copy the project by setting the current directory to the parent folder and using command: `chmod 777 name_of_subfolder/`. So, it would look like this: `root@DESKTOP:/name_of_parent_folder# chmod 777 name_of_subfolder/
+`
 
+- Install the gcc package using the command: `apt install gcc-riscv64-unknown-elf`
 
+- Install Python on your Linux distribution.
+
+By following these steps, your environment will be ready for process of generating _.hex_ file.
+To generate _.hex_ file, follow steps below:
+- Set the current directory to the project folder: _/openXC7-TetriSaraj-main_
+- To delete previously generated files, use the command: `make clean_fw`
+- After that, type command: `make firmware`
+- Finally, use command: `make hex`
+
+After these steps, _.hex_ file will be generated in the _/openXC7-TetriSaraj-main/2.sw_ folder.
