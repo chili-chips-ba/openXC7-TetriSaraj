@@ -21,7 +21,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-//#include <string.h>
 #include "uart.h"
 
 #define RAM_TOTAL 0x2000 // 8 KB
@@ -50,7 +49,7 @@ uint8_t buttons;
 static uint32_t delay = DELAY;
 static uint8_t field[1200];
 
-static uint8_t tetrominoes[7][16]={{0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0},
+static uint8_t tetrominoes[7][16]={{1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
 								   {0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0},
 								   {0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0},
 								   {0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0},
@@ -64,12 +63,15 @@ static void CharactersInit(void);
 static void DisplayProjectName(void);
 static void DisplayCompanyName(void);
 static void DisplayGameName(void);
-static void DisplayGameOverScreen(void);
+static void DisplayHeart(int x_start, int y_start, int color);
+static void setScreenColor(int color);
+static void DisplayGameOverScreen(int numLives );
+static void DisplayTheEndScreen(void);
 static void GetButtonStates(void);
 static int Rotate(int x, int y, int r);
 static bool DoesPieceFit(int ntetrominoes, int nRotation, int nPosX, int nPosY);						  
 static void DisplayDigit(uint8_t number, uint8_t startX, uint8_t startY);
-static void WriteScore(void); 
+static void WriteScore(int score); 
 
 // PRIVATE FUNCTIONS IMPLEMENTATION-------------------------------------------
 
@@ -92,7 +94,7 @@ void DisplayProjectName()
 	{ 
 		for (uint8_t x = 0; x < 40; x++) // Board Boundary
 		{
-			reg_video_map[y * 40 + x] = 9;
+			reg_video_map[y * 40 + x] = 9; // Background color
 			
 			//o
 			if (((y == nameY || y == nameY + 4) && (x >= 6 && x <= 8)) || ((x == 6 || x == 8) && (y >= nameY && y <= nameY + 4)))			
@@ -139,7 +141,7 @@ void DisplayCompanyName()
 		{
 			// blue line
 			if (y == lineY && (x >= lineXStart && x <= lineXEnd))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			
 			//C
 			if (x == 4 && (y >= nameY && y <= nameY + 4))
@@ -170,42 +172,42 @@ void DisplayCompanyName()
 				reg_video_map[y * 40 + x] = 7;
 			// C 
 			if (x == 19 && (y >= nameY && y <= nameY + 4) )
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY && (x == 20 || x == 21))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY + 4 && (x == 20 || x == 21))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			//H
 			if (x == 23 && (y >= nameY && y <= nameY + 4))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY + 2 && (x == 24 || x == 25))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (x == 25 && (y >= nameY && y <= nameY + 4))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			// I
 			if (x == 27 && (y >= nameY && y <= nameY + 4))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			// P
 			if (x == 29 && (y >= nameY && y <= nameY + 4))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY && (x == 30 || x == 31))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY + 2 && (x == 30 || x == 31))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (x == 31 && (y >= nameY && y <= nameY + 2))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			
 			// S 
 			if (y == nameY && (x >= 33 && x <= 35 ))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY + 2 && (x >= 33 && x <= 35))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (y == nameY + 4 && (x >= 33 && x <= 35))
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (x == 33 && y == nameY + 1)
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 			if (x == 35 && y == nameY + 3)
-				reg_video_map[y * 40 + x] = 2;
+				reg_video_map[y * 40 + x] = 10;
 		}
 	}
 }
@@ -293,50 +295,176 @@ void DisplayGameName()
 		}
 	}
 }
+/* 
+ * brief   displays heart on screen 
+ * return  void
+ */
+void DisplayHeart(int x_start, int y_start, int color){
+	for (int y = 0; y < 30; y++)
+	{ 
+		for (int x = 0; x < 40; x++) // Board Boundary
+		{
+			if((x==2+x_start || x==3+x_start || x==7+x_start || x==8+x_start) && y==y_start)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==1+x_start || x==4+x_start || x==6+x_start || x==9+x_start) && y==y_start+1)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==x_start || x==5+x_start || x==10+x_start) && y==y_start+2)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==x_start || x==10+x_start) && y==y_start+3)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==1+x_start || x==9+x_start) && y==y_start+4)
+				reg_video_map[y * 40 + x] = 0;	
+			if((x==2+x_start || x==8+x_start) && y==y_start+5)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==3+x_start || x==7+x_start) && y==y_start+6)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==4+x_start || x==6+x_start) && y==y_start+7)
+				reg_video_map[y * 40 + x] = 0;
+			if((x==5+x_start) && y==y_start+8)
+				reg_video_map[y * 40 + x] = 0;
+			
+			if((x==2+x_start || x==3+x_start || x==7+x_start || x==8+x_start) && y==y_start+1)
+				reg_video_map[y * 40 + x] = color;
+			if(((x>=1+x_start && x<=4+x_start) || (x>=6+x_start && x<=9+x_start)) && y==y_start+2)
+				reg_video_map[y * 40 + x] = color;
+			if((x>=1+x_start && x<=9+x_start) && y==y_start+3)
+				reg_video_map[y * 40 + x] = color;
+			if((x>=2+x_start && x<=8+x_start) && y==y_start+4)
+				reg_video_map[y * 40 + x] = color;
+			if((x>=3+x_start && x<=7+x_start) && y==y_start+5)
+				reg_video_map[y * 40 + x] = color;
+			if((x>=4+x_start && x<=6+x_start) && y==y_start+6)
+				reg_video_map[y * 40 + x] = color;
+			if(x==5+x_start && y==y_start+7)
+				reg_video_map[y * 40 + x] = color;
+			
+		}
+	}
 
+}
+/* 
+ * brief   set screen color
+ * return  void
+ */
+ void setScreenColor(int color){
+	for (uint8_t y = 0; y < 30; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			reg_video_map[y * 40 + x] = color;
+		}
+	}
+ }
 /* 
  * brief   displays game over screen 
  * return  void
  */
-void DisplayGameOverScreen(void)
+void DisplayGameOverScreen(int numLives )
 {
-	uint8_t nameY = 9;
+	uint8_t nameY = 1;
+	for (uint8_t y = 0; y < 30; y++)
+	{ 
+		for (uint8_t x = 0; x < 40; x++) // Board Boundary
+		{
+			reg_video_map[y * 40 + x] = 9;
+			
+			//G
+			if((x == 5 && (y >= nameY+2 && y <= nameY+5)) || (x == 6 && (y == nameY+1 || y == nameY+6)) || ((x >= 7 && x<= 11) && (y == nameY || y==nameY+7)) || (x==11 && (y>=nameY+4 && y<=nameY+7)) || (x >= 8 && x<= 11) && (y == nameY+4) )
+			reg_video_map[y * 40 + x] = 3;
+
+			//A	
+			if((x==16 && y==nameY) || ((x==15 || x==17) && y==nameY+1) || ((x==14 || x==18) && (y>=nameY+2 && y<=nameY+3)) || ((x>=13 && x<=19) && y==nameY+4) || ((x==13 || x==19) && (y>=nameY+5 && y<=nameY+7)))
+			reg_video_map[y * 40 + x] = 1;
+
+			//M
+			if(((x==21 || x==28) && (y>=nameY && y<=nameY+7)) || ((x==22 || x==27) && y==nameY) || ((x==23 || x==26) && (y>=nameY+1 && y<=nameY+2)) || ((x==24 || x==25) && y==nameY+3))
+			reg_video_map[y * 40 + x] = 2;
+
+			//E
+			if(((x>=30 && x<=34) && (y==nameY || y==nameY+7)) || (x==30 && (y>=nameY+1 && y<=nameY+6)) || ((x>=31 && x<=33) && y==nameY+4))
+			reg_video_map[y * 40 + x] = 4;
+
+
+			//O
+			if(((x==7 || x==12) && (y>=nameY+11 && y<=nameY+16)) || ((y==nameY+10 || y==nameY+17) && (x>=8 && x<=11)))
+			reg_video_map[y * 40 + x] = 3;
+
+			//V
+			if(((x==14 || x==20) && (y>=nameY+10 && y<=nameY+12)) || ((x==15 || x==19) && (y>=nameY+13 && y<=nameY+14)) || ((x==16 || x==18) && (y==nameY+15)) || ((x==17) && (y>=nameY+16 && y<=nameY+17)))
+			reg_video_map[y * 40 + x] = 1;
+
+			//E
+			if(((x>=22 && x<=26) && (y==nameY+10 || y==nameY+17)) || (x==22 && (y>=nameY+11 && y<=nameY+16)) || ((x>=23 && x<=25) && y==nameY+14))
+			reg_video_map[y * 40 + x] = 2;
+
+			//R
+			if((x==28 && (y>=nameY+10 && y<=nameY+17)) || ((x>=29 && x<=31) && (y==nameY+14 || y==nameY+10)) || ((x==32) && (y>=nameY+11 && y<=nameY+13)) || (x==30 && y==nameY+15) || (x==31 && y==nameY+16) || (x==32 && y==nameY+17))			
+			reg_video_map[y * 40 + x] = 4;
+		
+		
+		
+		}
+	}
+		// Lives
+			if(numLives==3){
+				DisplayHeart(5,21,3);
+				DisplayHeart(15,21,3);
+				DisplayHeart(25,21,3);
+			}
+			
+			if(numLives==2){
+				DisplayHeart(5,21,3);
+				DisplayHeart(15,21,3);
+				DisplayHeart(25,21,9);
+			}
+			
+			if(numLives==1){
+				DisplayHeart(5,21,3);
+				DisplayHeart(15,21,9);
+				DisplayHeart(25,21,9);
+			}
+			
+	
+}
+/* 
+ * brief   displays THE END screen 
+ * return  void
+ */
+void DisplayTheEndScreen(void)
+{
+	uint8_t nameY = 8;
 	for (uint8_t y = 0; y < 23; y++)
 	{ 
 		for (uint8_t x = 0; x < 40; x++) // Board Boundary
 		{
 			reg_video_map[y * 40 + x] = 0;
 			
-			// Y
-			if ((y == nameY + 2 && (x >= 4 && x <= 6)) || (x == 5 && (y >= nameY + 2 && y <= nameY + 4)) || ((x == 4 || x == 6) && (y >= nameY && y <= nameY + 2)))
-				reg_video_map[y * 40 + x] = 3;
-			
-			// O
-			if (((y == nameY || y == nameY + 4) && (x >= 8 && x <= 10)) || ((x == 8 || x == 10) && (y >= nameY && y <= nameY + 4)))			
-				reg_video_map[y * 40 + x] = 3;
-			
-			// U
-			if ((y == nameY + 4 && (x >= 12 && x <= 14)) || ((x == 12 || x == 14) && (y >= nameY && y <= nameY + 4)))			
-				reg_video_map[y * 40 + x] = 3;
-			
-			// L
-			if ((y == nameY + 4 && (x >= 18 && x <= 20)) || (x == 18 && (y >= nameY && y <= nameY + 4)))			
-				reg_video_map[y * 40 + x] = 3;
-			
-			// O
-			if (((y == nameY || y == nameY + 4) && (x >= 22 && x <= 24)) || ((x == 22 || x == 24) && (y >= nameY && y <= nameY + 4)))			
-				reg_video_map[y * 40 + x] = 3;
-			
-			// S
-			if (((y == nameY || y == nameY + 2 || y == nameY + 4) && (x >= 26 && x <= 28)) || (x == 26 && y == nameY + 1) ||(x == 28 && y == nameY + 3))
-				reg_video_map[y * 40 + x] = 3;
-			
 			// T
-			if ((y == nameY && (x >= 30 && x <= 32)) || (x == 31 && (y >= nameY && y <= nameY + 4)))
+			if ((y == nameY && (x >= 5 && x <= 7)) || (x == 6 && (y >= nameY && y <= nameY + 4)))
+				reg_video_map[y * 40 + x] = 3;
+			
+			// H
+			if ((y == nameY + 2 && (x >= 9 && x <= 11)) || ((x == 9 || x == 11) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// E
+			if (((y == nameY || y == nameY + 4) && (x >= 13 && x <= 15)) || (x == 13 && (y >= nameY && y <= nameY + 4)) || (y == nameY + 2 && (x >= 13 && x <= 14)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// E
+			if (((y == nameY || y == nameY + 4) && (x >= 20 && x <= 22)) || (x == 20 && (y >= nameY && y <= nameY + 4)) || (y == nameY + 2 && (x >= 20 && x <= 21)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// N
+			if ((y == nameY + 2 && x == 25) || (y == nameY + 3 && x == 26) || ((x == 24 || x == 27) && (y >= nameY && y <= nameY + 4)))			
+				reg_video_map[y * 40 + x] = 3;
+			
+			// D
+			if ((x == 31 && (y >= nameY + 1 && y <= nameY + 3)) || ((y == nameY || y == nameY + 4) && (x >= 29 && x <= 30)) || (x == 29 && (y >= nameY && y <= nameY + 4)))
 				reg_video_map[y * 40 + x] = 3;
 			
 			// !
-			if ((x == 34 && (y >= nameY && y <= nameY + 2)) || (x == 34 && y == nameY + 4))
+			if ((x == 33 && (y >= nameY && y <= nameY + 2)) || (x == 33 && y == nameY + 4))
 				reg_video_map[y * 40 + x] = 3;
 		}
 	}
@@ -363,7 +491,7 @@ void CharactersInit() {
 				else if(z == 1) // color green
 				{  
 					if(y == 0 || y == 1) pixel = 0x00000080; 
-					else if (x == 14 || x == 15) pixel = 0x000000B0;
+					else if (x == 14 || x == 15) pixel = 0x00000080;
 					else pixel = 0x000008B4; 
 				} 
 				else if(z == 2) // color blue
@@ -380,8 +508,8 @@ void CharactersInit() {
 				} 
 				else if(z == 4) // color yellow
 				{ 
-					if(y == 0 || y == 1) pixel = 0x00000FF8; 
-					else if (x == 14 || x == 15) pixel = 0x00000FF4; 
+					if(y == 0 || y == 1) pixel = 0x00000FD8; 
+					else if (x == 14 || x == 15) pixel = 0x00000FD4; 
 					else pixel = 0x00000FF0; 
 				} 
 				else if(z == 5) // color purple
@@ -408,13 +536,15 @@ void CharactersInit() {
 				} 
 				else if(z == 9) // color gray
 				{ 
-					if (x == 14 || x == 15) pixel = 0x00000CCC; // tamnija
-					else if(y == 0 || y == 1) pixel = 0x00000111; // svjetla 
-					else pixel = 0x00000AAA; // najtamnija	
+					if (x == 14 || x == 15) pixel = 0x00000CCC; 
+					else if(y == 0 || y == 1) pixel = 0x00000111; 
+					else pixel = 0x00000AAA; 	
 				} 
-				else if(z == 10) // not used
-				{	
-					pixel = 0x00000EEE;		
+				else if(z == 10) // color light blue
+				{
+					if(y == 0 || y == 1) pixel = 0x0000000B;
+					else if (x == 14 || x == 15) pixel = 0x0000000B;
+					else pixel = 0x00000007; 
 				} 
 				else if(z == 11) // not used
 				{
@@ -611,7 +741,7 @@ void DisplayScore(int score, int startX, int startY)
  * brief   displays the word score on the screen
  * return  void
  */
-void WriteScore() 
+void WriteScore(int score) 
 {
 	for (uint8_t y = 24; y < 29; y++) {
 		for (uint8_t x = 3; x < 21; x++) {
@@ -660,7 +790,24 @@ void WriteScore()
 		}
 	}
 	
-	DisplayScore(0, 22, 24);
+	DisplayScore(score, 22, 24);
+}
+/* 
+ * brief   creating the initial field
+ * return  void
+ */
+void FieldInitialization(){
+		
+	for (uint8_t y = 0; y < fieldHeight; y++) 
+	{
+		for (uint8_t x = 0; x < fieldWidth; x++)
+		{			
+			field[y * fieldWidth + x] = (y == 0 ||
+                                           y >= fieldHeight - 7 ||
+                                           x + 1 == fieldWidth / 2 ||
+                                           x == fieldWidth / 2 ) ? 9u : 0u;
+		}
+	}
 }
 
 /* 
@@ -676,27 +823,41 @@ static inline void _delay(uint32_t u32_delay)
 		if (i % 2 == 0) local++;
 	}
 }
-
+/* 
+ * brief   generates a 32-bit random number using XORSHIFT algorithm
+ * param   state: Pointer to the state variable for the random number generator
+ * return  unsigned int: The generated random number.
+ */
 unsigned int xorshift32(unsigned int *state) {
     unsigned int x = *state;
     x ^= x << 13;
     x ^= x >> 17;
     x ^= x << 5;
     *state = x;
-    return x & 1;
+    return x;
 }
-
-
+/* 
+ * brief   generates a random binary number (0 or 1)
+ * return  int: The generated random binary number (0 or 1)
+ */
 int generateRandomBinary() {
     static unsigned int state = 123456789;  
-    return xorshift32(&state);
+    return xorshift32(&state) % 2;
 }
+/* 
+ * brief   generates a random number within the specified range [min, max]
+ * param   min: The minimum value of the range
+ * param   max: The maximum value of the range
+ * return  int: The generated random number within the range [min, max]
+ */
 int generateRandomNumber(int min, int max) {
     static unsigned int state = 123456789; 
     unsigned int range = max - min + 1;
     unsigned int randomValue = xorshift32(&state) % range + min;
     return randomValue;
 }
+
+
 void main()
 {
     reg_uart_clkdiv = 217; // 100 MHz / 460800 baud
@@ -708,27 +869,22 @@ void main()
 	
 	CharactersInit();
 	DisplayProjectName();
-	_delay(20000);
+	_delay(15000);
 
 	DisplayCompanyName(); 
-	_delay(20000);
+	_delay(15000);
 	
 	DisplayGameName();
+	_delay(15000);
+	
+	FieldInitialization();
+	
+	setScreenColor(9);
+
+	DisplayHeart(5,9,3);
+	DisplayHeart(15,9,3);
+	DisplayHeart(25,9,3);
 	_delay(20000);
-	
-	
-	// Field initialization
-	for (uint8_t y = 0; y < fieldHeight; y++) 
-	{
-		for (uint8_t x = 0; x < fieldWidth; x++)
-		{			
-			field[y * fieldWidth + x] = (y == 0 ||
-                                           y >= fieldHeight - 7 ||
-                                           x + 1 == fieldWidth / 2 ||
-                                           x == fieldWidth / 2 ) ? 9u : 0u;
-		}
-	}
-	WriteScore();
 	
     // Game Logic
     uint16_t pieceIndex = 0;
@@ -736,8 +892,9 @@ void main()
     uint8_t pieceXCoordinate = 0;
     uint8_t pieceYCoordinate = fieldHeight / 2;
 	
-    uint8_t speed = 20;
+    uint8_t speed = 15;
     uint8_t gameTicksCount = 0;
+	uint8_t numLives=3;
     bool movePiece = false;
     bool rotationFlag = true;
 	
@@ -747,22 +904,28 @@ void main()
     uint8_t linesXCoordinates[4] = {0, 0, 0, 0};
     uint8_t linesCount = 0;
     bool isGameOver = false;
+	bool isTheEnd = false;
     uint8_t previousSide = 0;
 	bool hasScoreChanged = false;
 	
     uint8_t randomSideGenerator = 0;  // left - 0, right - 1
+	
+	WriteScore(score);
 
 	while (1) {
-
+		
+		if(isGameOver && numLives==1){
+			isTheEnd=true;
+			isGameOver=false;
+		}
+		
 		if (isGameOver)
 		{
-			DisplayGameOverScreen();
-			while (!(buttons & BUTTON_CENTER))
-			{
-				// Press center button to restart the game
-				GetButtonStates();
-			}
-			//upButton = true;
+			numLives=numLives-1;
+			DisplayGameOverScreen(numLives);
+			
+			_delay(18000);
+			
 			for (uint8_t y = 0; y < fieldHeight; y++) 
 			{
 				for (uint8_t x = 0; x < fieldWidth; x++)
@@ -773,9 +936,36 @@ void main()
 									   x == fieldWidth / 2 ) ? 9u : 0u;
 				}
 			}
-			score=0;
 			isGameOver=false;
-			WriteScore();
+			WriteScore(score);
+		}
+		
+		if (isTheEnd)
+		{
+					DisplayTheEndScreen();
+				
+					while (!(buttons & BUTTON_CENTER))
+					{
+						// Press center button to restart the game
+						GetButtonStates();
+					}
+					
+					for (uint8_t y = 0; y < fieldHeight; y++) 
+					{
+						for (uint8_t x = 0; x < fieldWidth; x++)
+						{
+							field[y * fieldWidth + x] = (y == 0 ||
+											   y >= fieldHeight - 7 ||
+											   x + 1 == fieldWidth / 2 ||
+											   x == fieldWidth / 2 ) ? 9u : 0u;
+						}
+					}
+					isTheEnd=false;
+
+					score=0;
+					speed=15;
+					
+					WriteScore(score);
 		}
 		delay--;
 				
@@ -905,9 +1095,8 @@ void main()
 					hasScoreChanged = true;
 					
 					// Generate new piece
-					pieceYCoordinate = ((fieldHeight - 7) / 2);
-					
-					
+					pieceYCoordinate = generateRandomNumber(2,19);
+					// Generate new side
 					randomSideGenerator= generateRandomBinary();
 
 					if (!randomSideGenerator) 
@@ -917,7 +1106,7 @@ void main()
 					}
 					else 
 					{
-						pieceRotation = 1;
+						pieceRotation = 3;
 						pieceXCoordinate = fieldWidth - 4;
 					}
 
