@@ -189,3 +189,27 @@ To generate _.hex_ file, follow steps below:
 - Finally, use command: `make hex`
 
 After these steps, _.hex_ file will be generated in the _/openXC7-TetriSaraj-main/2.sw_ folder.
+
+**<h3>  Reprogramming firmware via UART communication </h3>**
+
+As previously mentioned in the _Development Methodology_ section, due to the mentioned limitations, we were compelled to find a method that would replace the previously used build process whenever even the smallest change in the C code was made.
+
+We have developed a Python script (_/openXC7-TetriSaraj-main/sw/**program.py**_) to facilitate communication between a host computer and an FPGA device, sending a specific data file (main.hex), and receiving a response from the FPGA. The transmitted data is organized in packets with a checksum for reliability.
+
+Switch 15 is used to free the _UART RX/TX_ lines from the microcontroller and transfer them to the new FPGA modules, _uart_rx_ and _uart_tx_. After turning off Switch 15, the microcontroller is reset, and the application starts with the new C code.
+
+To reprogram the firmware using this method, follow these steps:
+
+- In the Python script _program.py_, set the ComPort for the FPGA board.
+  If you are using Linux use: `ComPort = serial.Serial('/dev/ttyUSBx') `.
+  If you are using Windows use: `ComPort = serial.Serial('COMx')`
+- Launch the Command Line Interface and set the current directory to: _/openXC7-TetriSaraj-main/sw_
+- Type: `python program.py`
+- Turn off switch 15.
+
+After this procedure, the new C program will be loaded into the RAM and ready for use.
+
+  
+
+
+
