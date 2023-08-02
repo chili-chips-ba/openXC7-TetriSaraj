@@ -253,7 +253,7 @@ module picosoc_mem #(
 	input [31:0] wdata,
 	output reg [31:0] rdata
 );
-	(* ram_style = "distributed" *) reg [31:0] mem [0:WORDS-1];
+	(* ram_style = "block" *) reg [31:0] mem [0:WORDS-1];
 
 	//initial $readmemh("firmware.hex", mem);
 	always @(posedge clk) begin
