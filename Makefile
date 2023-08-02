@@ -33,7 +33,7 @@ program: top.bit
 	openFPGALoader --board basys3 --bitstream $<
 	
 top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
-	yosys -p "synth_xilinx -flatten -abc9 -nobram -arch xc7 -top top; write_json top.json" $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
+	yosys -p "synth_xilinx -flatten -abc9 -arch xc7 -top top; write_json top.json" $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
 
 # The chip database only needs to be generated once
 # that is why we don't clean it with make clean
