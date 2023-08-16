@@ -165,23 +165,32 @@ With this process complete, the FPGA design journey comes full circle. The once 
 **<h3> FPGA Build Process </h3>**
 The tool required for the FPGA build process can be downloaded from the link: https://github.com/openXC7/toolchain-installer
 
-The "openXC7/toolchain-installer" is a GitHub repository that offers a convenient and automated solution for installing the toolchain required for Xilinx 7-series FPGA development. This toolchain installer is designed to streamline the setup process and facilitate FPGA design projects. The installation of tools consists of just **one command**! To use these tools, Linux with the **Ubuntu** distribution is required.
+The "openXC7/toolchain-installer" is a GitHub repository that offers a convenient and automated solution for installing the toolchain required for Xilinx 7-series FPGA development. This toolchain installer is designed to streamline the setup process and facilitate FPGA design projects. Repository contains scripts and configuration files that fetch and install the necessary tools, such as synthesis tools, simulation tools, and programming utilities. By automating the installation process, developers can save time and effort, ensuring a smoother toolchain setup.
 
-If you are not using a Linux system with the **Ubuntu** distribution on your computer, we recommend using Windows Subsystem for Linux (WSL) as an alternative solution.
+The installation of tools consists of just **one command**! To use these tools, Linux with the **Ubuntu** distribution is required.
 
-Repository contains scripts and configuration files that fetch and install the necessary tools, such as synthesis tools, simulation tools, and programming utilities. By automating the installation process, developers can save time and effort, ensuring a smoother and more consistent toolchain setup across different development environments.
+If you are not using a Linux system with the **Ubuntu** distribution on your computer, we recommend using Windows Subsystem for Linux (WSL) as an alternative solution. 
 
-**<h3> Linux Environment Setup and .hex File Generation </h3>**
-In order to generate the _.hex_ file, you need to have a Linux system with Ubuntu/Debian distribution and the **Python** package installed. To prepare the environment for this process, follow these steps:
+The installation of WSL is very simple, so follow the steps below:
+- Open Windows Power Shell.
+- Enter command: `wsl --install Ubuntu`. After the installation process, WSL starts automatically.
 
-- Download the project from GitHub and copy it to the desired folder. If you are using WSL, grant permissions to the subfolder where you want to copy the project by setting the current directory to the parent folder and using command: `chmod 777 name_of_subfolder/`. So, it would look like this: `root@DESKTOP:/name_of_parent_folder# chmod 777 name_of_subfolder/
-`
+The further procedure is identical whether you have WSL or an Ubuntu distribution of Linux on your computer. In case you are launching WSL, use the command `wsl` through Windows PowerShell. As WSL starts automatically after installation, you can proceed directly with the following steps: 
+- Install openXC7 tool using: `wget -qO - https://raw.githubusercontent.com/kintex-chatter/toolchain-installer/main/toolchain-installer.sh | bash`
+- Download demo projects along with the chip database using (we recommend downloading it to _/home/username_): `git clone https://github.com/openXC7/demo-projects`
+- Download _TetriSaraj_ project from GitHub into demo projects folder (_/demo-projects_) using: `git clone https://github.com/chili-chips-ba/openXC7-TetriSaraj
+  `
+- To install the "make" tool, use the following command: `sudo apt install make`
+- To install GCC package, first use: `sudo apt update`, and then: `sudo apt install gcc-riscv64-unknown-elf`
 
-- Install the gcc package using the command: `apt install gcc-riscv64-unknown-elf`
+Now you need to install Python package using the following commands:
+- `sudo apt install software-properties-common`
+- `sudo add-apt-repository ppa:deadsnakes/ppa`
+- `sudo apt update`
+- `sudo apt install python3.8`
+- `python3 --version`
+- `sudo apt install python-is-python3`
 
-- Install Python on your Linux distribution.
-
-By following these steps, your environment will be ready for process of generating _.hex_ file.
 To generate _.hex_ file, follow steps below:
 - Set the current directory to the project folder: _/openXC7-TetriSaraj-main_
 - To delete previously generated files, use the command: `make clean_fw`
@@ -189,6 +198,15 @@ To generate _.hex_ file, follow steps below:
 - Finally, use command: `make hex`
 
 After these steps, _.hex_ file will be generated in the _/openXC7-TetriSaraj-main/2.sw_ folder.
+
+Finally, to initiate the build process, use the command: `make all`
+
+The build process takes quite a while, please be patient.
+
+Afterwards, the .bit file will be generated in the project folder.
+
+If you want to upload bitstream file to FPGA board, use: `make program` (only for Linux users!).
+For Windows users, there is an issue with invisible ports on virtual machines, so it's recommended to use Digilent Adept tool: https://digilent.com/shop/software/digilent-adept/
 
 **<h3>  Reprogramming firmware via UART communication </h3>**
 
@@ -199,12 +217,13 @@ We have developed a Python script (_/openXC7-TetriSaraj-main/sw/**program.py**_)
 Switch 15 is used to free the _UART RX/TX_ lines from the microcontroller and transfer them to the new FPGA modules, _uart_rx_ and _uart_tx_. After turning off Switch 15, the microcontroller is reset, and the application starts with the new C code.
 
 To reprogram the firmware using this method, follow these steps:
-
+- After modifying the C program, generate a new _.hex_ file by following the procedure outlined in the _FPGA build process_ section.
 - In the Python script _program.py_, set the ComPort for the FPGA board.
   If you are using Linux use: `ComPort = serial.Serial('/dev/ttyUSBx') `.
   If you are using Windows use: `ComPort = serial.Serial('COMx')`
 - Launch the Command Line Interface and set the current directory to: _/openXC7-TetriSaraj-main/sw_
 - Type: `python program.py`
+- Wait until the reprogramming process is completed, indicated by the "END" output in the terminal.
 - Turn off switch 15.
 
 After this procedure, the new C program will be loaded into the RAM and ready for use.
