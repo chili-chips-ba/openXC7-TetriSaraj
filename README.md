@@ -1,4 +1,5 @@
 # openXC7-TetriSaraj
+<img width="762" alt="TetriSaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/67533663/1eacb310-5b40-4684-9328-2e06580bd204">
 
 **<h3> NAND-2-Tetris Acknowledgement </h3>**
 While our project did not use any of https://www.nand2tetris.org materials, it can be viewed as the bootstrapped, super-compressed variant of it. In any case, to those who're starting without prior knowledge of electronics, digital logic circuits, computers or programming for them, we warmly recommend this superb step-by-step course by Shimon Schocken and Noam Nisan. 
@@ -48,7 +49,6 @@ This section is about the algorithm basics, i.e. the logic of the game. It's wor
 The other SW parts are: <b>Game controls</b>, <b>Timing</b> and <b>Rendering</b>. They depened on the HW platform, and have to be adapted to it through porting process from PC host to embedded CPU. 
 
 <i>Tetrominoes</i> are the essence of the Game logic element. They're illustrated in the figure below.
-
   ![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/3f4bd9aa-19b2-46f8-92a8-beec3c671afe)
 
 There are 7 primary <i>tetromino</i> shapes. Including rotations, we get to 28 different shapes. However, to save memory, we store only the original shapes, using a 7x16 matrix of 1s and 0s, where 1s represent blocks, and 0s represent empty space. For example, let's take the 2nd <i>tetromino</i>, the squared one, and write it row-by-row from left to right: <br />
@@ -252,5 +252,11 @@ There are 4 major issues we've uncovered with openXC7. They are captured in the 
 There was also a number of minor issues which were resolved along the way.
 
 Our expert assessment is that openXC7, while not in its early infancy stage, is yet to reach the fully productive age of maturity. We would therefore not recommend it for large or commercial projects. At the moment, we view openXC7 primarily as a niche tool for the nerds and hobbyists. 
+
+**<h3>  Credits and public appearances </h3>**
+
+This work was sponsored by https://www.symbioticeda.com and showcased at https://sarajevo.makerfaire.com (June 2023).
+
+https://www.linkedin.com/posts/nedim-osmic_fpga-education-riscv-activity-7076521872032432129-b1Y5?utm_source=share&utm_medium=member_desktop
 
 **<h3>  End of document </h3>** 
