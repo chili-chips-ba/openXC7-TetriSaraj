@@ -204,10 +204,24 @@ Finally, to initiate the build process, use the command: `make all`
 
 The build process takes quite a while, please be patient.
 
-Afterwards, the .bit file will be generated in the project folder.
+Afterwards, the _.bit_ file will be generated in the project folder.
 
-If you want to upload bitstream file to FPGA board, use: `make program` (only for Linux users!).
-For Windows users, there is an issue with invisible ports on virtual machines, so it's recommended to use Digilent Adept tool: https://digilent.com/shop/software/digilent-adept
+To upload _.bit_ file to the board, it is necessary to have the _openFPGALoader_ tool installed (only for Linux users!).
+For Windows users, there is an issue with invisible ports on virtual machines, so it's recommended to use Digilent Adept tool: https://digilent.com/shop/software/digilent-adept. 
+
+Follow the instructions below for installing _openFPGALoader_:
+- `sudo apt update`
+- `sudo apt-get install libftdi1-2 libftdi1-dev libhidapi-hidraw0 libhidapi-dev libudev-dev zlib1g-dev cmake pkg-config make g++`
+- `git clone https://github.com/trabucayre/openFPGALoader`
+- `cd openFPGALoader`
+- `mkdir build`
+- `cd build`
+- `sudo apt-get install cmake`
+- `cmake ../`
+- `cmake --build .`
+- `sudo make install`
+
+If you want to upload bitstream file to FPGA board with _openFPGALoader_, use: `make program` 
 
 **<h3>  Reprogramming firmware via UART communication </h3>**
 
