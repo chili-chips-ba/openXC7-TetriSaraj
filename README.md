@@ -1,14 +1,14 @@
 # openXC7-TetriSaraj
-This is the very first, independent and unbiased attempt to use <i>openXC7</i> tool flow for a real-life FPGA design. All its earlier uses and example projects were created by the insiders, who knew ahead of time about the pitfalls to avoid. And yes, we have uncovered issues along the way, duly reported them, and kept marching along, at times even resorting to hacks to make it work. 
+This is the very first, independent and unbiased attempt to use <i>openXC7</i> tool flow for a real-life FPGA design. All its earlier uses and example projects were created by the insiders, who knew ahead of time about what pitfalls to avoid. And yes, we have uncovered issues along the way, duly reported them, and kept marching along, at times even resorting to hacks to make it work. 
 
 Most importantly, we did not even know that we were the Alpha testers, and learned it only when everything was already done &#128514;. 
 
-The compute platform used for this work was <i>Windows Subsystem for Linux (WSL)</i> as opposed to native Linux/Ubuntu. Decision to go with WSL came from our intent to maximize project accessibility, not leaving out even the middle school youngsters, who typically don't have native Linux machines.
+The compute platform used for this work was <i>Windows Subsystem for Linux (WSL)</i> as opposed to native Linux/Ubuntu. The decision to go with WSL came from our intent to maximize project accessibility, not leaving out even the middle school youngsters, who typically don't have native Linux machines.
 
 <img width="762" alt="TetriSaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/67533663/1eacb310-5b40-4684-9328-2e06580bd204">
  
 **<h3> NAND-2-Tetris Acknowledgement </h3>**
-While we did not use any of https://www.nand2tetris.org materials, our project can be viewed as a bootstrapped, super-compressed variant of it. We therefore warmly recommend that superb step-by-step guide (put together by Shimon Schocken and Noam Nisan) on how to build functioning Tetris starting from the mere NAND gates.
+While we did not use any of https://www.nand2tetris.org materials, our project can be viewed as a bootstrapped, super-compressed variant of it. We therefore warmly recommend this superb step-by-step guide /*put together by Shimon Schocken and Noam Nisan*/ on how to build functioning Tetris starting from the mere NAND gates.
 
 If you're starting without prior knowledge of electronics, digital logic circuits, computers or programming, then JMP to the link above, else CONT.
 
@@ -22,33 +22,42 @@ Tetris is a combinatorial game where a player maneuvers differently-shaped piece
 
 **<h3> TetriSaraj Intro </h3>**
 
-For our <i>TetriSaraj</i>, the pieces (<i>tetrominoes</i>) are sliding in from from the sides, in the random fashion, so leaving less time to think about approach and strategy. While our pieces are <i>"falling"</i> horizontally from both sides, one at the time, the logic is otherwise the same as ordinary Tetris, and the objective is to complete vertical lines by filling them with <i>tetrominoes</i>.
+In our <i>TetriSaraj</i>, the pieces (<i>tetrominoes</i>) are entering the field from the sides, in the random fashion, so leaving less time to think about approach and strategy. While our pieces are <i>"falling"</i> horizontally from both sides, one at the time, the logic is otherwise the same as ordinary Tetris. The objective is to complete vertical lines by filling them with <i>tetrominoes</i>.
 
   <img width="408" alt="tetrisaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/ceb74ee9-2ee2-461a-ab3f-e279f34bf71e">
 
 **<h3> Development Methodology </h3>**
 
-There are two main parts of our solution: HW and SW. To save time, and in the spirit of FPGA parallism, we've worked on them in parallel. 
+There are two main parts of our solution: HW and SW. To save time, and in the spirit of FPGA parallism, we've worked on both in parallel. 
 
-The first development track was the construction of Basys3 SOC with soft-core CPU, complemented with our special, simple, yet capable <i>Mega-Character (MC) Video Controller</i> for game visualization. This work was undertaken by the HW (Verilog RTL) group within our team.
+- The first development track was the construction of Basys3 SOC with soft-core CPU, complemented with our special, simple, yet capable <i>Mega-Character (MC) Video Controller</i> for game visualization. This work was undertaken by the HW (Verilog RTL) group within our team.
 
-At the same time, the SW group was working out the game algorithm in the comfortable <i>WinOS PC Visual Studio</i> setting, where the hi-res graphic output was emulated on a low-res terminal, as illustrated in the image below:
+- At the same time, the SW group was working out the game algorithm in the comfortable <i>WinOS PC Visual Studio</i> setting, where the hi-res graphic output was emulated on a low-res terminal, as illustrated in the image below:
 
   ![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/146a804c-dc82-46a3-8c0f-a984b1f0f3dc)
 
-When the logic of our game was fully worked out, we've switched to integration activities. Integration in this context is the merge of SW and HW track. 
+When the logic of our game was fully worked out, we've switched to <b>integration</b> activities. 
+>Integration in this context is the <b>merge of SW and HW track</b>. 
 
-Porting to the bare-metal RISC-V was a sizeable part of this integration and merging effort. To expedite the software iterations without having to rebuild the entire FPGA, we've developed a simple, robust and platform-agnostic own method for CPU program uploads <b>via UART</b>. That's a notable departure from the two typical approaches used in most other projects:
+**<h4> Simulation </h4>**
+
+Other than this terminal emulation of the Game Logic, we opted out of logic simulation. Even the hardware team found it more productive to validate the Video Controller directly on the board, using test patterns much simpler than the final game, which they wrote in 'C', indepedently from the software team. 
+
+The hard-core digital design puritans may declare it as a bad practice, and may even bring Formal into the fray. We would counter them with: <i>Welcome to the world of full field programmability!</i> Joking aside, it was the nature and low complexity of the problem at hand that allowed us to take this shortcut:
+- CPU was already proven, through both dynamic and static methods, taken as-is from the libary
+- Our brand new Video Controller design was a straight datapath, without large inter-connected FSMs, and without significant exceptions.
+
+**<h4> Code Porting </h4>**
+
+Porting from WinOS and to the <b>bare-metal RISC-V</b> was a sizeable part of our integration and merging effort. 
+
+To expedite the software iterations without having to rebuild the entire FPGA, we've developed a simple, robust and platform-agnostic own method for CPU program uploads <b>via UART</b>. That's a notable departure from the two typical approaches used in most other projects:
   - <b>via JTAG</b>, directly into internal FPGA BRAM: 
      > Not possible due to lack of openXC7 support for BSCANE2 Xilinx component
   - indirectly, into external <b>SPI Flash</b>, which CPU boot code then copies to on-chip BRAM
      > Not possible with Basys3, due to shortsightedness of board designers, coupled with openXC7 lack of support for STARTUPE2 Xilinx component
 
-The beauty of our CPU code download method is that it's fully portable across FPGA vendors and boards -- It's without inherent dependencies on the special, vendor-specific IP.
-     
-Other than this terminal emulation of the Game Logic, we opted out of logic simulation. Even the hardware team found it more productive to validate the Video Controller directly on the board, using test patterns much simpler than the final game, which they wrote in 'C', indepedently from the software team. 
-
-The hard-core digital design puritans may declare it as a bad practice, and may even bring Formal into the fray. We would counter them with: <i>Welcome to the world of full field programmability!</i> Joking aside, it was the nature and low complexity of the problem at hand that allowed us to take this shortcut -- The CPU was already proven, through both dynamic and static methods, taken as-is from the libary, and our brand new Video Controller design was a straight datapath, without large inter-connected FSMs, and without significant exceptions.
+The beauty of our CPU code download method is that it's fully portable across FPGA vendors and boards -- It's without inherent dependencies on the special, vendor-specific IP.    
 
 **<h3> Game Logic </h3>**
 
@@ -186,10 +195,10 @@ The installation of WSL is very simple, so follow the steps below:
 The remaining procedure is identical whether you have WSL or an Ubuntu distribution of Linux on your computer. In case you are launching WSL, use the command `wsl` through Windows PowerShell. As the WSL starts automatically after installation, you can proceed directly with following steps: <br />
 - Install openXC7 tool using: <br />
 `wget -qO - https://raw.githubusercontent.com/kintex-chatter/toolchain-installer/main/toolchain-installer.sh | bash`
-- Download demo projects along with the chip database using (we recommend downloading it to _/home/username_): <br />
+- Download demo projects along with the chip database using (we recommend downloading it to default destination _/home/<YOUR_USERNAME>_): <br />
 `git clone https://github.com/openXC7/demo-projects`
 - Download _TetriSaraj_ project from GitHub into demo projects folder (_/demo-projects_) using: <br />
-`git clone https://github.com/chili-chips-ba/openXC7-TetriSaraj`
+`git clone https://github.com/chili-chips-ba/openXC7-TetriSaraj ~/demo-projects/TetriSaraj`
 - To install the "make" tool, use the following command: `sudo apt install make`
 - To install GCC package, first use: `sudo apt update`, and then: `sudo apt install gcc-riscv64-unknown-elf`
 
