@@ -1,10 +1,18 @@
 # openXC7-TetriSaraj
+This is the very first, independent and unbiased attempt to use <i>openXC7</i> tool flow for a real-life FPGA design. All its earlier uses and example projects were created by the insiders, who knew ahead of time about the pitfalls to avoid. And yes, we have uncovered issues along the way, duly reported them, and kept marching along, at times even resorting to hacks to make it work. 
+
+Most importantly, we did not even know that we were the Alpha testers, and learned it only when everything was already done &#128514;. 
+
+The compute platform used for this work was <i>Windows Subsystem for Linux (WSL)</i> as opposed to native Linux/Ubuntu. Decision to go with WSL came from our intent to maximize project accessibility, not leaving out even the middle school youngsters, who typically don't have native Linux machines.
+
 <img width="762" alt="TetriSaraj" src="https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/67533663/1eacb310-5b40-4684-9328-2e06580bd204">
-
+ 
 **<h3> NAND-2-Tetris Acknowledgement </h3>**
-While our project did not use any of https://www.nand2tetris.org materials, it can be viewed as the bootstrapped, super-compressed variant of it. In any case, to those who're starting without prior knowledge of electronics, digital logic circuits, computers or programming for them, we warmly recommend this superb step-by-step course by Shimon Schocken and Noam Nisan. 
+While we did not use any of https://www.nand2tetris.org materials, our project can be viewed as a bootstrapped, super-compressed variant of it. We therefore warmly recommend that superb step-by-step guide (put together by Shimon Schocken and Noam Nisan) on how to build functioning Tetris starting from the mere NAND gates.
 
-**<h3> Tetris recap </h3>**
+If you're starting without prior knowledge of electronics, digital logic circuits, computers or programming, then JMP to the link above, else CONT.
+
+**<h3> Tetris Recap </h3>**
 
 Even though most of us know what Tetris is and how to play it, we'll first briefly explain its logic and rules.
 
@@ -12,7 +20,7 @@ Tetris is a combinatorial game where a player maneuvers differently-shaped piece
 
 ![Typical_Tetris_Game](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/bbd94950-8c0d-4dce-a1da-66681715f41d)
 
-**<h3> TetriSaraj introduction </h3>**
+**<h3> TetriSaraj Intro </h3>**
 
 For our <i>TetriSaraj</i>, the pieces (<i>tetrominoes</i>) are sliding in from from the sides, in the random fashion, so leaving less time to think about approach and strategy. While our pieces are <i>"falling"</i> horizontally from both sides, one at the time, the logic is otherwise the same as ordinary Tetris, and the objective is to complete vertical lines by filling them with <i>tetrominoes</i>.
 
@@ -31,31 +39,32 @@ At the same time, the SW group was working out the game algorithm in the comfort
 When the logic of our game was fully worked out, we've switched to integration activities. Integration in this context is the merge of SW and HW track. 
 
 Porting to the bare-metal RISC-V was a sizeable part of this integration and merging effort. To expedite the software iterations without having to rebuild the entire FPGA, we've developed a simple, robust and platform-agnostic own method for CPU program uploads <b>via UART</b>. That's a notable departure from the two typical approaches used in most other projects:
-  - 1) <b>via JTAG</b>, directly into internal FPGA BRAM: 
-     >> Not possible due to lack of openXC7 support for BSCANE2 Xilinx component
-  - 2) indirectly, into external <b>SPI Flash</b>, which CPU boot code then copies to on-chip BRAM
-     >> Not possible with Basys3, due to shortsightedness of board designers, coupled with openXC7 lack of support for STARTUPE2 Xilinx component
+  - <b>via JTAG</b>, directly into internal FPGA BRAM: 
+     > Not possible due to lack of openXC7 support for BSCANE2 Xilinx component
+  - indirectly, into external <b>SPI Flash</b>, which CPU boot code then copies to on-chip BRAM
+     > Not possible with Basys3, due to shortsightedness of board designers, coupled with openXC7 lack of support for STARTUPE2 Xilinx component
 
 The beauty of our CPU code download method is that it's fully portable across FPGA vendors and boards -- It's without inherent dependencies on the special, vendor-specific IP.
      
-Other than this terminal emulation of game logic, we opted out of logic simulation. Even the hardware team found it more productive to validate the Video Controller directly on the board, using test patterns much simpler than the final game, which they wrote in 'C', indepedently from the software team. 
+Other than this terminal emulation of the Game Logic, we opted out of logic simulation. Even the hardware team found it more productive to validate the Video Controller directly on the board, using test patterns much simpler than the final game, which they wrote in 'C', indepedently from the software team. 
 
-The hard-core digital design puritans may declare it as a bad practice, and may even bring Formal into the fray, which we counter with: <i>Welcome to the world of full field programmability!</i> Joking aside, it was the nature and low complexity of the problem at hand that allowed us to take this shortcut -- The CPU was already proven, through both dynamic and static methods, taken as-is from the libary, and our brand new Video Controller design was a straight datapath, without large inter-connected FSMs, and without significant exceptions.
+The hard-core digital design puritans may declare it as a bad practice, and may even bring Formal into the fray. We would counter them with: <i>Welcome to the world of full field programmability!</i> Joking aside, it was the nature and low complexity of the problem at hand that allowed us to take this shortcut -- The CPU was already proven, through both dynamic and static methods, taken as-is from the libary, and our brand new Video Controller design was a straight datapath, without large inter-connected FSMs, and without significant exceptions.
 
-**<h3> Game logic </h3>**
+**<h3> Game Logic </h3>**
 
 This section is about the algorithm basics, i.e. the logic of the game. It's worth emphasizing that this the heart of our app, and stays the same for both full-fledged PC and bare-metal RISC-V implementation. 
 
-The other SW parts are: <b>Game controls</b>, <b>Timing</b> and <b>Rendering</b>. They depened on the HW platform, and have to be adapted to it through porting process from PC host to embedded CPU. 
+The other SW parts are: <b>Game Controls</b>, <b>Timing</b> and <b>Rendering</b>. They depened on the HW platform, and have to be adapted to it through porting process from PC host to embedded CPU. 
 
-<i>Tetrominoes</i> are the essence of the Game logic element. They're illustrated in the figure below.
+<i>Tetrominoes</i> are the essence of the Game Logic element. They're illustrated in the figure below.
   ![image](https://github.com/chili-chips-ba/openXC7-TetriSaraj/assets/113244867/3f4bd9aa-19b2-46f8-92a8-beec3c671afe)
 
 There are 7 primary <i>tetromino</i> shapes. Including rotations, we get to 28 different shapes. However, to save memory, we store only the original shapes, using a 7x16 matrix of 1s and 0s, where 1s represent blocks, and 0s represent empty space. For example, let's take the 2nd <i>tetromino</i>, the squared one, and write it row-by-row from left to right: <br />
-       0, 0, 0, 0; <br />
-       0, 1, 1, 0; <br />
-       0, 1, 1, 0; <br />
-       0, 0, 0, 0; <br />
+> 0, 0, 0, 0; <br />
+> 0, 1, 1, 0; <br />
+> 0, 1, 1, 0; <br />
+> 0, 0, 0, 0; <br />
+
 This is clearly an array of 16 elements. Seven such arrays make the full primary <i>tetromino</i> set. The entire 40x30 playing field is stored in a similar array, for which we use "<i>field</i>" variable.
 
 So, how can this 7x16 primary <i>tetromino</i> matrix account for all 28x16 rotations? The answer is: <i>By using algorithmic smarts in lieu of the brute force</i>. For that, we have <i>rotate</i> function with 3 input arguments: <b>X</b> coordinate, <b>Y</b> coordinate, and <b>R</b>otation. This function returns the <b>I</b>ndex of the so-rotated block in the original piece. We should note that the X, Y coordinates take values from 0..3; R is {0, 90, 180, 270}; and returned Index is 0..15. Rotation is executed clockwise.
@@ -67,7 +76,7 @@ The 1st piece is the original, primary <i>tetromino</i>. The remaining 3 are its
 
 The same applies to other rotations and other figures. Let's now have a look at R=270 degrees. We observe the block on coordinates X=1, Y=2. The relation for this case is <i>"Index = 3 - Y + (X * 4)"</i>. That gives us 5 again, meaning that this specific block is the same as the block on Index 5 of the original piece.
 
-So, what is the game logic? 
+So, what is the Game Logic? 
 
 Upon receiving a game tick, we first look at the commands. If one of the command buttons is pressed, we try to move the piece in the specified direction, or rotate it. For that, we first check whether the moved-or-rotated piece can fit in the position the command wants it to be in. If it cannot fit, we lock the piece in the field /* write a shape-specific values in the <i>field</i> variable */, i.e. don't honor the command. 
 
@@ -84,7 +93,7 @@ This fit test is done by checking if both: <br />
  - and <i>field</i> block on index <i>fi</i> <br />
  are not empty. Both being not-empty means collision, for which our <i>DoesPieceFit</i> function returns <i>false</i>.
 
-**<h3> Game timing </h3>**
+**<h3> Game Timing </h3>**
 
 The timing of the game is controlled by our own ticks. As the game progresses, the game ticks become more frequent, making it more challenging for the player.
 
@@ -92,7 +101,7 @@ On the PC side (implemented in C++), we use "<i>this_thread::sleep_for</i>" meth
 
 A similar method was used for <i>Basys3</i>. Except that, in the absence of "<i>this_thread::sleep_for</i>" there, we had to come up with our own embedded <i>sleep</i> methods. Other than that, the rest of the logic is the same. 
 
-**<h3> Game controls </h3>**
+**<h3> Game Controls </h3>**
 
 On the PC side we used "<i>GetAsyncKeyState</i>" method to detect if a keyboard button was pressed. The controls are: <i>Left, Right, Up, Down arrow</i>, and <i>"Z" key for rotation</i>. Upon detecting that a key was pressed, we first check whether the piece can be moved at all. That's covered by "<i>DoesPieceFit</i>" function. 
 
@@ -114,7 +123,7 @@ For example, the 4x smaller, 12x less expensive TangNano9K could also easily hos
 
 The next section brings about additional detail on our HW platform, and its video sub-system in particular.
 
-**<h3> Screen organization </h3>**
+**<h3> Screen Organization </h3>**
 The video interface between hardware and software consists of:
 - Screen of 640x480 RGB444 pixels divided into 40x30 (=1200) squares, each square being 16x16 pixels.
 - Hardware implements a character set of 16 elements. Each element is a 16x16 pixel image in full RGB444 color palette, requiring 384 bytes of memory for one element.
@@ -223,7 +232,7 @@ Follow the instructions below for installing _openFPGALoader_:
 
 If you want to upload bitstream file to FPGA board with _openFPGALoader_, use: `make program` 
 
-**<h3>  Reprogramming firmware via UART communication </h3>**
+**<h3>  Reprogramming Firmware via UART </h3>**
 
 As previously mentioned in the _Development Methodology_ section, due to the limitations of openXC7 toolchain, we were compelled to find a method that would avoid the need to rebuild the entire FPGA for even the smallest change in the C source code.
 
@@ -243,34 +252,48 @@ Here is the procedure to use for quick firmware reprograming:
 
 The new C program will now be loaded into RAM and ready for use.
 
-**<h3>  Demonstration of the complete HW+SW app </h3>**  
+**<h3>  Demo of the Complete HW+SW App </h3>**  
 
 Here is a teaser video we've created just to tickle your interest https://youtu.be/hwV8Yd4jkjU -- The checked-in game contains more than what is shown in this video! It adds the concept of 3 lives, visually expressed by hearts. The game ends when you loose all 3.
 
-We encourage you to go through the above process, build both HW and SW, to then play the expanded game. After that, try to modify the 'C' code to also add the concept of rewards, such as by earning an extra life (i.e. heart) when two lines are filled at once.
+We encourage you to go through the above process, build both HW and SW, then play the expanded game. After that, try to modify the 'C' code on your own, such as by adding the concept of rewards. Here is an idea: Make it earn an extra life (which is a heart) when two lines are filled at once. Put your thinking cap on and keep cranking up new game features!
 
-**<h3>  Closing thoughts </h3>** 
+**<h3>  Closing Thoughts </h3>** 
 
-OpenXC7 is not the only open-source tool chain for Xilinx Series7 family of FPGA devices. We have in the course of this project also tried the <b>VTR</b> (https://github.com/chipsalliance/f4pga), and vendor-proprietary <b>Vivado</b>. We found the VTR to be more robust and more user-friendly than openXC7. And, as anticipated, Vivado beat them all in terms of both feature set and QOR. 
+OpenXC7 is not the only open-source tool chain for Xilinx Series7 family of FPGA devices. We have in the course of this project also tried the <b>VTR</b> (https://github.com/chipsalliance/f4pga), and vendor-proprietary <b>Vivado</b>. We established that the VTR was more robust and user-friendly than openXC7. And, as anticipated, Vivado surpassed them all in terms of both feature set and QOR. 
+
+However, the openXC7 installation was maximally streamlined and super easy -- One simple command, literally copied from their instructions, and everything was ready for play. The VTR installation was much more involved. It did not even work out of the box. It took 3 smart engineers a few days to put everything in place and tune it properly before this flow with US$50M dev budget started generating bit-files :woozy_face:.
 
 There are 4 major issues we've uncovered with openXC7. They are captured in the following tool support entries:
-1) https://github.com/openXC7/nextpnr-xilinx/issues/10
-   - Main analytical placer locks up for designs with high Distributed RAM usage
-2) https://github.com/openXC7/nextpnr-xilinx/issues/11
-   - Error messaging does not provide enough info for the self-guided debug
-3) https://github.com/openXC7/nextpnr-xilinx/issues/12
-   - STA is very rudimentary, down to not even honoring timing constraints, yet alone accounting for clock tree skew
-4) https://github.com/openXC7/nextpnr-xilinx/issues/13
-   - Prioritize support of BSCANE2 and STARTUPE2 primitives
+>1) https://github.com/openXC7/nextpnr-xilinx/issues/10
+>    Main analytical placer locks up for designs with high Distributed RAM usage
+>2) https://github.com/openXC7/nextpnr-xilinx/issues/11
+>    Error messaging does not provide enough info for the self-guided debug
+>3) https://github.com/openXC7/nextpnr-xilinx/issues/12
+>    STA is very rudimentary, down to not even honoring timing constraints, yet alone accounting for clock tree skew
+>4) https://github.com/openXC7/nextpnr-xilinx/issues/13
+>    Prioritize support of BSCANE2 and STARTUPE2 primitives
 
-There was also a number of minor issues which were resolved along the way.
+There was also a number of minor issues. We resolved them on the go.
 
 Our expert assessment is that openXC7, while not in its early infancy stage, is yet to reach the fully productive age of maturity. We would therefore not recommend it for large or commercial projects. At the moment, we view openXC7 primarily as a niche tool for the nerds and hobbyists. 
 
-**<h3>  Credits and public appearances </h3>**
+**<h3>  Credits and Public Appearances </h3>**
 
 This work was sponsored by https://www.symbioticeda.com and showcased at https://sarajevo.makerfaire.com (June 2023).
 
-https://www.linkedin.com/posts/nedim-osmic_fpga-education-riscv-activity-7076521872032432129-b1Y5?utm_source=share&utm_medium=member_desktop
+> https://www.linkedin.com/posts/nedim-osmic_fpga-education-riscv-activity-7076521872032432129-b1Y5?utm_source=share&utm_medium=member_desktop
 
-**<h3>  End of document </h3>** 
+**<h3>  Next Steps </h3>**
+
+This is not the end of TetriSaraj. Rather, it's an opener of a whole new play life:
+- port to TangNano9K/20K and HDMI
+- port from PicoRV32 to our own <b>eduBOS5</b>
+- SOC cleanup and restructuring to our <b>eduSOC</b> built around our <b>eduBUS32</b>
+- migration from Verilog-1995 to SystemVerilog-2008
+- add support for Sprites
+- add digital sound through HDMI-A
+- integration of all project variants into Docker Containers for the CI system that SymbioticEDA team is working on
+- propagation to other interested parties (Faculties of Electrical Engineering in Tuzla, Banja Luka, Pakistan, Tunis, ...), whoever and wherever wishes to leverage from it for their educational or other programs
+
+**<h3>  End of Document </h3>** 
