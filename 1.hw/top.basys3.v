@@ -103,7 +103,7 @@ module top (
     reg [7:0] reset_cnt = 0;
     wire resetn = &reset_cnt;
 
-	wire sw_dl1, sw_dl2;
+	reg sw_dl1, sw_dl2;
     always @(posedge clk_bufg) 
 	begin
 		sw_dl1 <= sw[15];
@@ -163,11 +163,11 @@ module top (
     // Peripheral Bus
     ///////////////////////////////////	
 	wire        iomem_valid;
-	reg         iomem_ready;
+	wire        iomem_ready;
 	wire [ 3:0] iomem_wstrb;
 	wire [31:0] iomem_addr;
 	wire [31:0] iomem_wdata;
-	reg  [31:0] iomem_rdata;
+	wire  [31:0] iomem_rdata;
 
 	reg  [31:0] gpio;
 	wire [4:0]  debug_pins_char_gen;
@@ -565,7 +565,7 @@ module top (
 	end
 	
 	reg progmem_wen;
-	wire ram_wen_dl1, ram_wen_dl2;
+	reg ram_wen_dl1, ram_wen_dl2;
     always @(posedge clk)  
     begin  	
 		if(sw[15]) begin	
