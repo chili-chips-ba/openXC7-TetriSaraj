@@ -20,9 +20,9 @@ module vga_wrapper (
     
     // signal declarations
 	wire charset_on, charset_on1, charset_on2;	
-	wire char_mem_write, map_mem_write;
+	reg char_mem_write, map_mem_write;
 	wire [11:0] write_address;    
-	reg [11:0] read_address, map_read_address;
+	wire [11:0] read_address, map_read_address;
 	wire [11:0] rgb_rdata;
 	wire [3:0] map_rdata;		
 	
