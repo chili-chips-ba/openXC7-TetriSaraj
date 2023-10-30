@@ -1,4 +1,10 @@
+NEXTPNR_XILINX_DIR ?= /snap/openxc7/current/opt/nextpnr-xilinx
+NEXTPNR_XILINX_PYTHON_DIR ?= ${NEXTPNR_XILINX_DIR}/python
+
 PREFIX ?= /snap/openxc7/current
+
+PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
+
 DB_DIR=${PREFIX}/opt/nextpnr-xilinx/external/prjxray-db
 CHIPDB=../chipdb
 
@@ -35,12 +41,6 @@ program: top.bit
 top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
 	yosys -p "synth_xilinx -flatten -abc9 -arch xc7 -top top; write_json top.json" $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
 
-# The chip database only needs to be generated once
-# that is why we don't clean it with make clean
-${CHIPDB}/${PART}.bin:
-	python3 ${PREFIX}/opt/nextpnr-xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
-	bbasm -l ${PART}.bba ${CHIPDB}/${PART}.bin
-	rm -f ${PART}.bba
 	
 	
 top.fasm: top.json ${CHIPDB}/${PART}.bin
