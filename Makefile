@@ -7,7 +7,7 @@ PYPY3 ?= pypy3
 PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
 
 DB_DIR=${PREFIX}/opt/nextpnr-xilinx/external/prjxray-db
-CHIPDB=../chipdb
+CHIPDB=./chipdb
 
 #PART = xc7a100tcsg324-1
 PART = xc7a35tcpg236-1
