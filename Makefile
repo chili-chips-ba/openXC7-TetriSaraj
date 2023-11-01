@@ -1,7 +1,7 @@
 NEXTPNR_XILINX_DIR ?= /openxc7/current/opt/nextpnr-xilinx
 NEXTPNR_XILINX_PYTHON_DIR ?= ${NEXTPNR_XILINX_DIR}/python
 
-PREFIX ?= /openxc7/current
+PREFIX ?= /openxc7
 PYPY3 ?= pypy3
 
 PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
@@ -45,7 +45,7 @@ top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) 
 # The chip database only needs to be generated once
 # that is why we don't clean it with make clean
 ${CHIPDB}/${DBPART}.bin:
-	python3 ${PREFIX}/opt/nextpnr-xilinx/xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
+	python3 /opt/nextpnr-xilinx/xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
 	bbasm -l ${DBPART}.bba ${CHIPDB}/${DBPART}.bin
 	rm -f ${DBPART}.bba
 	
