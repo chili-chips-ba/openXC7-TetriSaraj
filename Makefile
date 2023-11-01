@@ -44,10 +44,10 @@ top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) 
 
 # The chip database only needs to be generated once
 # that is why we don't clean it with make clean
-${CHIPDB}/${DBPART}.bin:
+${CHIPDB}/${PART}.bin:
 	python3 /opt/nextpnr-xilinx/xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
-	bbasm -l ${DBPART}.bba ${CHIPDB}/${DBPART}.bin
-	rm -f ${DBPART}.bba
+	bbasm -l ${PART}.bba ${CHIPDB}/${PART}.bin
+	rm -f ${PART}.bba
 	
 	
 top.fasm: top.json ${CHIPDB}/${PART}.bin
