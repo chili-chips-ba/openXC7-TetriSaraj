@@ -2,6 +2,7 @@ NEXTPNR_XILINX_DIR ?= /openxc7/current/opt/nextpnr-xilinx
 NEXTPNR_XILINX_PYTHON_DIR ?= ${NEXTPNR_XILINX_DIR}/python
 
 PREFIX ?= /openxc7/current
+PYPY3 ?= pypy3
 
 PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
 
