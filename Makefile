@@ -57,7 +57,7 @@ top.frames: top.fasm
 	fasm2frames --part ${PART} --db-root ${DB_DIR}/artix7 $< > $@ #FIXME: fasm2frames should be on PATH
 
 top.bit: top.frames
-	xc7frames2bit --part_file ${DB_DIR}/artix7/${PART}/part.yaml --part_name ${PART} --frm_file $< --output_file $@
+	xc7frames2bit --part_file /opt/nextpnr-xilinx/xilinx/external/prjxray-db/artix7/${PART}/part.yaml --part_name ${PART} --frm_file $< --output_file $@
 	
 	#Install gcc package: apt install gcc-riscv64-unknown-elf
 CROSS=riscv64-unknown-elf-
