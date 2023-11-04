@@ -1,0 +1,42 @@
+#=======================================
+# Physical Constraints file / Pinout
+#=======================================
+
+#___Inputs
+IO_LOC  "clk_ext" 52;
+IO_PORT "clk_ext" PULL_MODE=UP  IO_TYPE=LVCMOS33 ;
+
+# S1
+IO_LOC  "butnL_n" 4;
+IO_PORT "butnL_n" PULL_MODE=UP;
+
+# S2
+IO_LOC  "butnR_n" 3;
+IO_PORT "butnR_n" PULL_MODE=UP;
+
+#___Outputs
+# IO_LOC  "led_n[0]" 10;
+# IO_PORT "led_n[0]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n" 11;
+IO_PORT "led_n" PULL_MODE=UP DRIVE=8;
+# IO_LOC  "led_n[2]" 13;
+# IO_PORT "led_n[2]" PULL_MODE=UP DRIVE=8;
+# IO_LOC  "led_n[3]" 14;
+# IO_PORT "led_n[3]" PULL_MODE=UP DRIVE=8;
+# IO_LOC  "led_n[4]" 15;
+# IO_PORT "led_n[4]" PULL_MODE=UP DRIVE=8;
+# IO_LOC  "led_n[5]" 16;
+# IO_PORT "led_n[5]" PULL_MODE=UP DRIVE=8;
+
+
+IO_LOC  "hdmi_clk_p"    69,68;
+IO_PORT "hdmi_clk_p"    PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[0]" 71,70;
+IO_PORT "hdmi_dat_p[0]" PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[1]" 73,72;
+IO_PORT "hdmi_dat_p[1]" PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[2]" 75,74;
+IO_PORT "hdmi_dat_p[2]" PULL_MODE=NONE DRIVE=8;
+
+
+#___End-of-File

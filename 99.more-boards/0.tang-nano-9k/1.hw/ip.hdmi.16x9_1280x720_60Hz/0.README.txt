@@ -1,0 +1,8 @@
+The resolution is 1280p x 720p, 16x9
+The standard used is CVT-RBv2.
+All known problems are solved, there is no vertical lines, and no problem with moving object.
+
+
+Rezolucija je 1280p x 720p. 
+Standard koji koristen je CVT-RBv2.
+Svi poznati problemi su rijeseni, nema veritaklnih linija koje se pojavljuju na ekranu, kao ni problema sa objektima koji se krecu.
