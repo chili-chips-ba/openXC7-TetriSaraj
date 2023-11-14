@@ -6,7 +6,7 @@ PYPY3 ?= pypy3
 
 PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
 
-DB_DIR=${PREFIX}/opt/nextpnr-xilinx/external/prjxray-db
+DB_DIR=/opt/nextpnr-xilinx/external/prjxray-db
 CHIPDB=./chipdb
 
 #PART = xc7a100tcsg324-1
@@ -40,7 +40,7 @@ program: top.bit
 	openFPGALoader --board basys3 --bitstream $<
 	
 top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
-	yosys -p "synth_xilinx -flatten -abc9 -arch xc7 -top top; write_json top.json" $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
+	yosys -q -p "synth_xilinx -flatten -abc9 -arch xc7 -top top; write_json top.json" $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) $(SRC_FILES4) $(SRC_FILES5)
 
 # The chip database only needs to be generated once
 # that is why we don't clean it with make clean
@@ -51,7 +51,7 @@ ${CHIPDB}/${PART}.bin:
 	
 	
 top.fasm: top.json ${CHIPDB}/${PART}.bin
-	nextpnr-xilinx --chipdb ${CHIPDB}/${PART}.bin --xdc $(XDC_FILE) --json top.json --fasm $@ --verbose --debug
+	nextpnr-xilinx --chipdb ${CHIPDB}/${PART}.bin --xdc $(XDC_FILE) --json top.json --fasm $@ --quiet --debug
 	
 top.frames: top.fasm
 	fasm2frames --part ${PART} --db-root ${DB_DIR}/artix7 $< > $@ #FIXME: fasm2frames should be on PATH
