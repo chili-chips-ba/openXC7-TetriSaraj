@@ -4,9 +4,9 @@ NEXTPNR_XILINX_PYTHON_DIR ?= ${NEXTPNR_XILINX_DIR}/python
 PREFIX ?= /openxc7
 PYPY3 ?= pypy3
 
-PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/external/prjxray-db
+PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/xilinx/external/prjxray-db
 
-DB_DIR=/opt/nextpnr-xilinx/external/prjxray-db
+DB_DIR=/opt/nextpnr-xilinx/xilinx/external/prjxray-db
 CHIPDB=./chipdb
 
 #PART = xc7a100tcsg324-1
