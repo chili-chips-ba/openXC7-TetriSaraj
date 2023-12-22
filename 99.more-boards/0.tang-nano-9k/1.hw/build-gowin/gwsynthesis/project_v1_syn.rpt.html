@@ -1,0 +1,1946 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>synthesis Report</title>
+<style type="text/css">
+body { font-family: Verdana, Arial, sans-serif; font-size: 12px; }
+div#main_wrapper{ width: 100%; }
+div#content { margin-left: 350px; margin-right: 30px; }
+div#catalog_wrapper {position: fixed; top: 30px; width: 350px; float: left; }
+div#catalog ul { list-style-type: none; }
+div#catalog li { text-align: left; list-style-type:circle; color: #0084ff; margin-top: 3px; margin-bottom: 3px; }
+div#catalog a { display:inline-block; text-decoration: none; color: #0084ff; font-weight: bold; padding: 3px; }
+div#catalog a:visited { color: #0084ff; }
+div#catalog a:hover { color: #fff; background: #0084ff; }
+hr { margin-top: 30px; margin-bottom: 30px; }
+h1, h3 { text-align: center; }
+h1 {margin-top: 50px; }
+table, th, td { border: 1px solid #aaa; }
+table { border-collapse:collapse; margin-top: 10px; margin-bottom: 20px; width: 100%; }
+th, td { padding: 5px 5px 5px 5px; }
+th { color: #fff; font-weight: bold; background-color: #0084ff; }
+table.summary_table td.label { width: 24%; min-width: 200px; background-color: #dee8f4; }
+table.detail_table td.label { min-width: 100px; width: 8%;}
+</style>
+</head>
+<body>
+<div id="main_wrapper">
+<div id="catalog_wrapper">
+<div id="catalog">
+<ul>
+<li><a href="#about" style=" font-size: 16px;">Synthesis Messages</a></li>
+<li><a href="#summary" style=" font-size: 16px;">Synthesis Details</a></li>
+<li><a href="#resource" style=" font-size: 16px;">Resource</a>
+<ul>
+<li><a href="#usage" style=" font-size: 14px;">Resource Usage Summary</a></li>
+<li><a href="#utilization" style=" font-size: 14px;">Resource Utilization Summary</a></li>
+</ul>
+</li>
+<li><a href="#timing" style=" font-size: 16px;">Timing</a>
+<ul>
+<li><a href="#clock" style=" font-size: 14px;">Clock Summary</a></li>
+<li><a href="#performance" style=" font-size: 14px;">Max Frequency Summary</a></li>
+<li><a href="#detail timing" style=" font-size: 14px;">Detail Timing Paths Informations</a></li>
+</ul>
+</li>
+</ul>
+</div><!-- catalog -->
+</div><!-- catalog_wrapper -->
+<div id="content">
+<h1><a name="about">Synthesis Messages</a></h1>
+<table class="summary_table">
+<tr>
+<td class="label">Report Title</td>
+<td>GowinSynthesis Report</td>
+</tr>
+<tr>
+<td class="label">Design File</td>
+<td>C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\gowin_rpll\gowin_rpll.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.cpu\picorv32.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.cpu\picosoc_noflash.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_oddr.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_olvds.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_oser10.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_pll.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_backend.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_pkg.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_tdms_enc.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_wrapper.sv<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.vga\vga_map_ram.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.vga\vga_ram.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\progmem.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\top.v<br>
+C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_AO_0\gw_ao_mem_ctrl.v<br>
+C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_AO_0\gw_ao_top.v<br>
+C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_CON\gw_con_top.v<br>
+C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\gw_jtag.v<br>
+C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\impl\gwsynthesis\RTL_GAO\gw_gao_top.v<br>
+</td>
+</tr>
+<tr>
+<td class="label">GowinSynthesis Constraints File</td>
+<td>---</td>
+</tr>
+<tr>
+<td class="label">Version</td>
+<td>GowinSynthesis V1.9.8.10</td>
+</tr>
+<tr>
+<td class="label">Part Number</td>
+<td>GW1NR-LV9QN88PC6/I5</td>
+</tr>
+<tr>
+<td class="label">Device</td>
+<td>GW1NR-9</td>
+</tr>
+<tr>
+<td class="label">Device Version</td>
+<td>C</td>
+</tr>
+<tr>
+<td class="label">Created Time</td>
+<td>Mon Dec 18 19:46:35 2023
+</td>
+</tr>
+<tr>
+<td class="label">Legal Announcement</td>
+<td>Copyright (C)2014-2022 Gowin Semiconductor Corporation. ALL rights reserved.</td>
+</tr>
+</table>
+<h1><a name="summary">Synthesis Details</a></h1>
+<table class="summary_table">
+<tr>
+<td class="label">Top Level Module</td>
+<td>top</td>
+</tr>
+<tr>
+<td class="label">Synthesis Process</td>
+<td>Running parser:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 2s, Elapsed time = 0h 0m 1s, Peak memory usage = 101.859MB<br/>Running netlist conversion:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s, Peak memory usage = 0MB<br/>Running device independent optimization:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 0: CPU time = 0h 0m 0.937s, Elapsed time = 0h 0m 0.889s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 1: CPU time = 0h 0m 0.328s, Elapsed time = 0h 0m 0.284s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Optimizing Phase 2: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s, Peak memory usage = 101.859MB<br/>Running inference:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 0: CPU time = 0h 0m 3s, Elapsed time = 0h 0m 3s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 1: CPU time = 0h 0m 0.062s, Elapsed time = 0h 0m 0.053s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 2: CPU time = 0h 0m 0.046s, Elapsed time = 0h 0m 0.048s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Inferring Phase 3: CPU time = 0h 0m 0.031s, Elapsed time = 0h 0m 0.041s, Peak memory usage = 101.859MB<br/>Running technical mapping:<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 0: CPU time = 0h 0m 1s, Elapsed time = 0h 0m 1s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 1: CPU time = 0h 0m 0.312s, Elapsed time = 0h 0m 0.315s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 2: CPU time = 0h 0m 0.625s, Elapsed time = 0h 0m 0.625s, Peak memory usage = 101.859MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 3: CPU time = 0h 0m 33s, Elapsed time = 0h 0m 34s, Peak memory usage = 106.965MB<br/>&nbsp;&nbsp;&nbsp;&nbsp;Tech-Mapping Phase 4: CPU time = 0h 0m 0.656s, Elapsed time = 0h 0m 0.698s, Peak memory usage = 106.965MB<br/>Generate output files:<br/>&nbsp;&nbsp;&nbsp;&nbsp;CPU time = 0h 0m 0.546s, Elapsed time = 0h 0m 0.597s, Peak memory usage = 106.965MB<br/></td>
+</tr>
+<tr>
+<td class="label">Total Time and Memory Usage</td>
+<td>CPU time = 0h 0m 43s, Elapsed time = 0h 0m 43s, Peak memory usage = 106.965MB</td>
+</tr>
+</table>
+<h1><a name="resource">Resource</a></h1>
+<h2><a name="usage">Resource Usage Summary</a></h2>
+<table class="summary_table">
+<tr>
+<td class="label"><b>Resource</b></td>
+<td><b>Usage</b></td>
+</tr>
+<tr>
+<td class="label"><b>I/O Port </b></td>
+<td>24</td>
+</tr>
+<tr>
+<td class="label"><b>I/O Buf </b></td>
+<td>20</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspIBUF</td>
+<td>9</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspOBUF</td>
+<td>3</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspTBUF</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspELVDS_OBUF</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label"><b>Register </b></td>
+<td>1618</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFF</td>
+<td>189</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFE</td>
+<td>513</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFS</td>
+<td>16</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFSE</td>
+<td>49</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFR</td>
+<td>145</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFRE</td>
+<td>406</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFP</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFC</td>
+<td>30</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFCE</td>
+<td>258</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFNP</td>
+<td>2</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDFFNC</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspDLNCE</td>
+<td>2</td>
+</tr>
+<tr>
+<td class="label"><b>LUT </b></td>
+<td>3386</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspLUT2</td>
+<td>362</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspLUT3</td>
+<td>913</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspLUT4</td>
+<td>2111</td>
+</tr>
+<tr>
+<td class="label"><b>ALU </b></td>
+<td>570</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspALU</td>
+<td>570</td>
+</tr>
+<tr>
+<td class="label"><b>INV </b></td>
+<td>14</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspINV</td>
+<td>14</td>
+</tr>
+<tr>
+<td class="label"><b>IOLOGIC </b></td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspOSER10</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label"><b>BSRAM </b></td>
+<td>26</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspSP</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspSDPB</td>
+<td>15</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspSDPX9B</td>
+<td>3</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbsppROM</td>
+<td>4</td>
+</tr>
+<tr>
+<td class="label"><b>CLOCK </b></td>
+<td>3</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspCLKDIV</td>
+<td>1</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbsprPLL</td>
+<td>2</td>
+</tr>
+<tr>
+<td class="label"><b>Black Box </b></td>
+<td>1</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp&nbsp&nbspGW_JTAG</td>
+<td>1</td>
+</tr>
+</table>
+<h2><a name="utilization">Resource Utilization Summary</a></h2>
+<table class="summary_table">
+<tr>
+<td class="label"><b>Resource</b></td>
+<td><b>Usage</b></td>
+<td><b>Utilization</b></td>
+</tr>
+<tr>
+<td class="label">Logic</td>
+<td>3970(3400 LUTs, 570 ALUs) / 8640</td>
+<td>46%</td>
+</tr>
+<tr>
+<td class="label">Register</td>
+<td>1618 / 6693</td>
+<td>25%</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp--Register as Latch</td>
+<td>2 / 6693</td>
+<td><1%</td>
+</tr>
+<tr>
+<td class="label">&nbsp&nbsp--Register as FF</td>
+<td>1616 / 6693</td>
+<td>25%</td>
+</tr>
+<tr>
+<td class="label">BSRAM</td>
+<td>26 / 26</td>
+<td>100%</td>
+</tr>
+</table>
+<h1><a name="timing">Timing</a></h1>
+<h2><a name="clock">Clock Summary:</a></h2>
+<table class="summary_table">
+<tr>
+<th>Clock Name</th>
+<th>Type</th>
+<th>Period</th>
+<th>Frequency(MHz)</th>
+<th>Rise</th>
+<th>Fall</th>
+<th>Source</th>
+<th>Master</th>
+<th>Object</th>
+</tr>
+<tr>
+<td>clk_27</td>
+<td>Base</td>
+<td>37.037</td>
+<td>27.0</td>
+<td>0.000</td>
+<td>18.519</td>
+<td> </td>
+<td> </td>
+<td>clk_27_ibuf/I </td>
+</tr>
+<tr>
+<td>clk27_to_clk75/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>Generated</td>
+<td>15.432</td>
+<td>64.8</td>
+<td>0.000</td>
+<td>7.716</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>clk27_to_clk75/rpll_inst/CLKOUT </td>
+</tr>
+<tr>
+<td>clk27_to_clk75/rpll_inst/CLKOUTP.default_gen_clk</td>
+<td>Generated</td>
+<td>15.432</td>
+<td>64.8</td>
+<td>0.000</td>
+<td>7.716</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>clk27_to_clk75/rpll_inst/CLKOUTP </td>
+</tr>
+<tr>
+<td>clk27_to_clk75/rpll_inst/CLKOUTD.default_gen_clk</td>
+<td>Generated</td>
+<td>30.864</td>
+<td>32.4</td>
+<td>0.000</td>
+<td>15.432</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>clk27_to_clk75/rpll_inst/CLKOUTD </td>
+</tr>
+<tr>
+<td>clk27_to_clk75/rpll_inst/CLKOUTD3.default_gen_clk</td>
+<td>Generated</td>
+<td>46.296</td>
+<td>21.6</td>
+<td>0.000</td>
+<td>23.148</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>clk27_to_clk75/rpll_inst/CLKOUTD3 </td>
+</tr>
+<tr>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUT.default_gen_clk</td>
+<td>Generated</td>
+<td>3.086</td>
+<td>324.0</td>
+<td>0.000</td>
+<td>1.543</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUT </td>
+</tr>
+<tr>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTP.default_gen_clk</td>
+<td>Generated</td>
+<td>3.086</td>
+<td>324.0</td>
+<td>0.000</td>
+<td>1.543</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTP </td>
+</tr>
+<tr>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTD.default_gen_clk</td>
+<td>Generated</td>
+<td>6.173</td>
+<td>162.0</td>
+<td>0.000</td>
+<td>3.086</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTD </td>
+</tr>
+<tr>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTD3.default_gen_clk</td>
+<td>Generated</td>
+<td>9.259</td>
+<td>108.0</td>
+<td>0.000</td>
+<td>4.630</td>
+<td>clk_27_ibuf/I</td>
+<td>clk_27</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUTD3 </td>
+</tr>
+<tr>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+<td>Generated</td>
+<td>15.432</td>
+<td>64.8</td>
+<td>0.000</td>
+<td>7.716</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUT</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_pll/CLKOUT.default_gen_clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT </td>
+</tr>
+</table>
+<h2><a name="performance">Max Frequency Summary:</a></h2>
+<table class="summary_table">
+<tr>
+<th>No.</th>
+<th>Clock Name</th>
+<th>Constraint</th>
+<th>Actual Fmax</th>
+<th>Logic Level</th>
+<th>Entity</th>
+</tr>
+<tr>
+<td>1</td>
+<td>clk_27</td>
+<td>27.0(MHz)</td>
+<td>189.2(MHz)</td>
+<td>4</td>
+<td>TOP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>clk27_to_clk75/rpll_inst/CLKOUT.default_gen_clk</td>
+<td>64.8(MHz)</td>
+<td>59.6(MHz)</td>
+<td>11</td>
+<td>TOP</td>
+</tr>
+<tr>
+<td>3</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+<td>64.8(MHz)</td>
+<td>100.6(MHz)</td>
+<td>7</td>
+<td>TOP</td>
+</tr>
+</table>
+<h2><a name="detail timing">Detail Timing Paths Information</a></h2>
+<h3>Path&nbsp1</h3>
+<b>Path Summary:</b></br>
+<table class="summary_table">
+<tr>
+<td class="label">Slack</td>
+<td>-6.229</td>
+</tr>
+<tr>
+<td class="label">Data Arrival Time</td>
+<td>118.255</td>
+</tr>
+<tr>
+<td class="label">Data Required Time</td>
+<td>112.026</td>
+</tr>
+<tr>
+<td class="label">From</td>
+<td>hw/u_hdmi_backend/vcount_9_s0</td>
+</tr>
+<tr>
+<td class="label">To</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_41_s0</td>
+</tr>
+<tr>
+<td class="label">Launch Clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk[R]</td>
+</tr>
+<tr>
+<td class="label">Latch Clk</td>
+<td>clk_27[R]</td>
+</tr>
+</table>
+<b>Data Arrival Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>108.025</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+</tr>
+<tr>
+<td>108.388</td>
+<td>0.363</td>
+<td>tCL</td>
+<td>RR</td>
+<td>70</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT</td>
+</tr>
+<tr>
+<td>108.751</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/CLK</td>
+</tr>
+<tr>
+<td>109.210</td>
+<td>0.458</td>
+<td>tC2Q</td>
+<td>RF</td>
+<td>12</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/Q</td>
+</tr>
+<tr>
+<td>109.690</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n90_s9/I1</td>
+</tr>
+<tr>
+<td>110.789</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n90_s9/F</td>
+</tr>
+<tr>
+<td>111.269</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n92_s10/I1</td>
+</tr>
+<tr>
+<td>112.368</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>4</td>
+<td>hw/n92_s10/F</td>
+</tr>
+<tr>
+<td>112.848</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n53_s9/I1</td>
+</tr>
+<tr>
+<td>113.947</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n53_s9/F</td>
+</tr>
+<tr>
+<td>114.427</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/I0</td>
+</tr>
+<tr>
+<td>115.459</td>
+<td>1.032</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/F</td>
+</tr>
+<tr>
+<td>115.939</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_17_s/I1</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>1.045</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_17_s/COUT</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_16_s/CIN</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_16_s/COUT</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_15_s/CIN</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_15_s/COUT</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_14_s/CIN</td>
+</tr>
+<tr>
+<td>117.155</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_14_s/COUT</td>
+</tr>
+<tr>
+<td>117.155</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_13_s/CIN</td>
+</tr>
+<tr>
+<td>117.212</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_13_s/COUT</td>
+</tr>
+<tr>
+<td>117.212</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_12_s/CIN</td>
+</tr>
+<tr>
+<td>117.775</td>
+<td>0.563</td>
+<td>tINS</td>
+<td>FF</td>
+<td>13</td>
+<td>hw/hw_12_s/SUM</td>
+</tr>
+<tr>
+<td>118.255</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_41_s0/D</td>
+</tr>
+</table>
+<b>Data Required Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>clk_27</td>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td>tCL</td>
+<td>RR</td>
+<td>1</td>
+<td>clk_27_ibuf/I</td>
+</tr>
+<tr>
+<td>112.093</td>
+<td>0.982</td>
+<td>tINS</td>
+<td>RR</td>
+<td>74</td>
+<td>clk_27_ibuf/O</td>
+</tr>
+<tr>
+<td>112.456</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_41_s0/CLK</td>
+</tr>
+<tr>
+<td>112.426</td>
+<td>-0.030</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_41_s0</td>
+</tr>
+<tr>
+<td>112.026</td>
+<td>-0.400</td>
+<td>tSu</td>
+<td> </td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_41_s0</td>
+</tr>
+</table>
+<b>Path Statistics:</b>
+<table class="summary_table">
+<tr>
+<td class="label">Clock Skew:</td>
+<td>0.618</td>
+</tr>
+<tr>
+<td class="label">Setup Relationship:</td>
+<td>3.086</td>
+</tr>
+<tr>
+<td class="label">Logic Level:</td>
+<td>7</td>
+</tr>
+<tr>
+<td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+<tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 6.165, 64.872%; route: 2.880, 30.305%; tC2Q: 0.458, 4.823%</td></tr>
+<tr>
+<td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+</table>
+<br/>
+<h3>Path&nbsp2</h3>
+<b>Path Summary:</b></br>
+<table class="summary_table">
+<tr>
+<td class="label">Slack</td>
+<td>-6.172</td>
+</tr>
+<tr>
+<td class="label">Data Arrival Time</td>
+<td>118.198</td>
+</tr>
+<tr>
+<td class="label">Data Required Time</td>
+<td>112.026</td>
+</tr>
+<tr>
+<td class="label">From</td>
+<td>hw/u_hdmi_backend/vcount_9_s0</td>
+</tr>
+<tr>
+<td class="label">To</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_40_s0</td>
+</tr>
+<tr>
+<td class="label">Launch Clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk[R]</td>
+</tr>
+<tr>
+<td class="label">Latch Clk</td>
+<td>clk_27[R]</td>
+</tr>
+</table>
+<b>Data Arrival Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>108.025</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+</tr>
+<tr>
+<td>108.388</td>
+<td>0.363</td>
+<td>tCL</td>
+<td>RR</td>
+<td>70</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT</td>
+</tr>
+<tr>
+<td>108.751</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/CLK</td>
+</tr>
+<tr>
+<td>109.210</td>
+<td>0.458</td>
+<td>tC2Q</td>
+<td>RF</td>
+<td>12</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/Q</td>
+</tr>
+<tr>
+<td>109.690</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n90_s9/I1</td>
+</tr>
+<tr>
+<td>110.789</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n90_s9/F</td>
+</tr>
+<tr>
+<td>111.269</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n92_s10/I1</td>
+</tr>
+<tr>
+<td>112.368</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>4</td>
+<td>hw/n92_s10/F</td>
+</tr>
+<tr>
+<td>112.848</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n53_s9/I1</td>
+</tr>
+<tr>
+<td>113.947</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n53_s9/F</td>
+</tr>
+<tr>
+<td>114.427</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/I0</td>
+</tr>
+<tr>
+<td>115.459</td>
+<td>1.032</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/F</td>
+</tr>
+<tr>
+<td>115.939</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_17_s/I1</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>1.045</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_17_s/COUT</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_16_s/CIN</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_16_s/COUT</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_15_s/CIN</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_15_s/COUT</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_14_s/CIN</td>
+</tr>
+<tr>
+<td>117.155</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_14_s/COUT</td>
+</tr>
+<tr>
+<td>117.155</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_13_s/CIN</td>
+</tr>
+<tr>
+<td>117.718</td>
+<td>0.563</td>
+<td>tINS</td>
+<td>FF</td>
+<td>13</td>
+<td>hw/hw_13_s/SUM</td>
+</tr>
+<tr>
+<td>118.198</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_40_s0/D</td>
+</tr>
+</table>
+<b>Data Required Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>clk_27</td>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td>tCL</td>
+<td>RR</td>
+<td>1</td>
+<td>clk_27_ibuf/I</td>
+</tr>
+<tr>
+<td>112.093</td>
+<td>0.982</td>
+<td>tINS</td>
+<td>RR</td>
+<td>74</td>
+<td>clk_27_ibuf/O</td>
+</tr>
+<tr>
+<td>112.456</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_40_s0/CLK</td>
+</tr>
+<tr>
+<td>112.426</td>
+<td>-0.030</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_40_s0</td>
+</tr>
+<tr>
+<td>112.026</td>
+<td>-0.400</td>
+<td>tSu</td>
+<td> </td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_40_s0</td>
+</tr>
+</table>
+<b>Path Statistics:</b>
+<table class="summary_table">
+<tr>
+<td class="label">Clock Skew:</td>
+<td>0.618</td>
+</tr>
+<tr>
+<td class="label">Setup Relationship:</td>
+<td>3.086</td>
+</tr>
+<tr>
+<td class="label">Logic Level:</td>
+<td>7</td>
+</tr>
+<tr>
+<td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+<tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 6.108, 64.660%; route: 2.880, 30.488%; tC2Q: 0.458, 4.852%</td></tr>
+<tr>
+<td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+</table>
+<br/>
+<h3>Path&nbsp3</h3>
+<b>Path Summary:</b></br>
+<table class="summary_table">
+<tr>
+<td class="label">Slack</td>
+<td>-6.115</td>
+</tr>
+<tr>
+<td class="label">Data Arrival Time</td>
+<td>118.141</td>
+</tr>
+<tr>
+<td class="label">Data Required Time</td>
+<td>112.026</td>
+</tr>
+<tr>
+<td class="label">From</td>
+<td>hw/u_hdmi_backend/vcount_9_s0</td>
+</tr>
+<tr>
+<td class="label">To</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_39_s0</td>
+</tr>
+<tr>
+<td class="label">Launch Clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk[R]</td>
+</tr>
+<tr>
+<td class="label">Latch Clk</td>
+<td>clk_27[R]</td>
+</tr>
+</table>
+<b>Data Arrival Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>108.025</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+</tr>
+<tr>
+<td>108.388</td>
+<td>0.363</td>
+<td>tCL</td>
+<td>RR</td>
+<td>70</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT</td>
+</tr>
+<tr>
+<td>108.751</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/CLK</td>
+</tr>
+<tr>
+<td>109.210</td>
+<td>0.458</td>
+<td>tC2Q</td>
+<td>RF</td>
+<td>12</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/Q</td>
+</tr>
+<tr>
+<td>109.690</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n90_s9/I1</td>
+</tr>
+<tr>
+<td>110.789</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n90_s9/F</td>
+</tr>
+<tr>
+<td>111.269</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n92_s10/I1</td>
+</tr>
+<tr>
+<td>112.368</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>4</td>
+<td>hw/n92_s10/F</td>
+</tr>
+<tr>
+<td>112.848</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n53_s9/I1</td>
+</tr>
+<tr>
+<td>113.947</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n53_s9/F</td>
+</tr>
+<tr>
+<td>114.427</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/I0</td>
+</tr>
+<tr>
+<td>115.459</td>
+<td>1.032</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/F</td>
+</tr>
+<tr>
+<td>115.939</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_17_s/I1</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>1.045</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_17_s/COUT</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_16_s/CIN</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_16_s/COUT</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_15_s/CIN</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_15_s/COUT</td>
+</tr>
+<tr>
+<td>117.098</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_14_s/CIN</td>
+</tr>
+<tr>
+<td>117.661</td>
+<td>0.563</td>
+<td>tINS</td>
+<td>FF</td>
+<td>13</td>
+<td>hw/hw_14_s/SUM</td>
+</tr>
+<tr>
+<td>118.141</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_39_s0/D</td>
+</tr>
+</table>
+<b>Data Required Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>clk_27</td>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td>tCL</td>
+<td>RR</td>
+<td>1</td>
+<td>clk_27_ibuf/I</td>
+</tr>
+<tr>
+<td>112.093</td>
+<td>0.982</td>
+<td>tINS</td>
+<td>RR</td>
+<td>74</td>
+<td>clk_27_ibuf/O</td>
+</tr>
+<tr>
+<td>112.456</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_39_s0/CLK</td>
+</tr>
+<tr>
+<td>112.426</td>
+<td>-0.030</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_39_s0</td>
+</tr>
+<tr>
+<td>112.026</td>
+<td>-0.400</td>
+<td>tSu</td>
+<td> </td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_39_s0</td>
+</tr>
+</table>
+<b>Path Statistics:</b>
+<table class="summary_table">
+<tr>
+<td class="label">Clock Skew:</td>
+<td>0.618</td>
+</tr>
+<tr>
+<td class="label">Setup Relationship:</td>
+<td>3.086</td>
+</tr>
+<tr>
+<td class="label">Logic Level:</td>
+<td>7</td>
+</tr>
+<tr>
+<td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+<tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 6.051, 64.446%; route: 2.880, 30.673%; tC2Q: 0.458, 4.881%</td></tr>
+<tr>
+<td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+</table>
+<br/>
+<h3>Path&nbsp4</h3>
+<b>Path Summary:</b></br>
+<table class="summary_table">
+<tr>
+<td class="label">Slack</td>
+<td>-6.058</td>
+</tr>
+<tr>
+<td class="label">Data Arrival Time</td>
+<td>118.084</td>
+</tr>
+<tr>
+<td class="label">Data Required Time</td>
+<td>112.026</td>
+</tr>
+<tr>
+<td class="label">From</td>
+<td>hw/u_hdmi_backend/vcount_9_s0</td>
+</tr>
+<tr>
+<td class="label">To</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_38_s0</td>
+</tr>
+<tr>
+<td class="label">Launch Clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk[R]</td>
+</tr>
+<tr>
+<td class="label">Latch Clk</td>
+<td>clk_27[R]</td>
+</tr>
+</table>
+<b>Data Arrival Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>108.025</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+</tr>
+<tr>
+<td>108.388</td>
+<td>0.363</td>
+<td>tCL</td>
+<td>RR</td>
+<td>70</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT</td>
+</tr>
+<tr>
+<td>108.751</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/CLK</td>
+</tr>
+<tr>
+<td>109.210</td>
+<td>0.458</td>
+<td>tC2Q</td>
+<td>RF</td>
+<td>12</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/Q</td>
+</tr>
+<tr>
+<td>109.690</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n90_s9/I1</td>
+</tr>
+<tr>
+<td>110.789</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n90_s9/F</td>
+</tr>
+<tr>
+<td>111.269</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n92_s10/I1</td>
+</tr>
+<tr>
+<td>112.368</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>4</td>
+<td>hw/n92_s10/F</td>
+</tr>
+<tr>
+<td>112.848</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n53_s9/I1</td>
+</tr>
+<tr>
+<td>113.947</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n53_s9/F</td>
+</tr>
+<tr>
+<td>114.427</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/I0</td>
+</tr>
+<tr>
+<td>115.459</td>
+<td>1.032</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/F</td>
+</tr>
+<tr>
+<td>115.939</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_17_s/I1</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>1.045</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_17_s/COUT</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_16_s/CIN</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.057</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_16_s/COUT</td>
+</tr>
+<tr>
+<td>117.041</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_15_s/CIN</td>
+</tr>
+<tr>
+<td>117.604</td>
+<td>0.563</td>
+<td>tINS</td>
+<td>FF</td>
+<td>13</td>
+<td>hw/hw_15_s/SUM</td>
+</tr>
+<tr>
+<td>118.084</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_38_s0/D</td>
+</tr>
+</table>
+<b>Data Required Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>clk_27</td>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td>tCL</td>
+<td>RR</td>
+<td>1</td>
+<td>clk_27_ibuf/I</td>
+</tr>
+<tr>
+<td>112.093</td>
+<td>0.982</td>
+<td>tINS</td>
+<td>RR</td>
+<td>74</td>
+<td>clk_27_ibuf/O</td>
+</tr>
+<tr>
+<td>112.456</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_38_s0/CLK</td>
+</tr>
+<tr>
+<td>112.426</td>
+<td>-0.030</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_38_s0</td>
+</tr>
+<tr>
+<td>112.026</td>
+<td>-0.400</td>
+<td>tSu</td>
+<td> </td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_38_s0</td>
+</tr>
+</table>
+<b>Path Statistics:</b>
+<table class="summary_table">
+<tr>
+<td class="label">Clock Skew:</td>
+<td>0.618</td>
+</tr>
+<tr>
+<td class="label">Setup Relationship:</td>
+<td>3.086</td>
+</tr>
+<tr>
+<td class="label">Logic Level:</td>
+<td>7</td>
+</tr>
+<tr>
+<td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+<tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 5.994, 64.229%; route: 2.880, 30.860%; tC2Q: 0.458, 4.911%</td></tr>
+<tr>
+<td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+</table>
+<br/>
+<h3>Path&nbsp5</h3>
+<b>Path Summary:</b></br>
+<table class="summary_table">
+<tr>
+<td class="label">Slack</td>
+<td>-6.001</td>
+</tr>
+<tr>
+<td class="label">Data Arrival Time</td>
+<td>118.027</td>
+</tr>
+<tr>
+<td class="label">Data Required Time</td>
+<td>112.026</td>
+</tr>
+<tr>
+<td class="label">From</td>
+<td>hw/u_hdmi_backend/vcount_9_s0</td>
+</tr>
+<tr>
+<td class="label">To</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_37_s0</td>
+</tr>
+<tr>
+<td class="label">Launch Clk</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk[R]</td>
+</tr>
+<tr>
+<td class="label">Latch Clk</td>
+<td>clk_27[R]</td>
+</tr>
+</table>
+<b>Data Arrival Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>108.025</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT.default_gen_clk</td>
+</tr>
+<tr>
+<td>108.388</td>
+<td>0.363</td>
+<td>tCL</td>
+<td>RR</td>
+<td>70</td>
+<td>hw/u_hdmi_backend/u_fpga_pll/u_clkdiv/CLKOUT</td>
+</tr>
+<tr>
+<td>108.751</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/CLK</td>
+</tr>
+<tr>
+<td>109.210</td>
+<td>0.458</td>
+<td>tC2Q</td>
+<td>RF</td>
+<td>12</td>
+<td>hw/u_hdmi_backend/vcount_9_s0/Q</td>
+</tr>
+<tr>
+<td>109.690</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n90_s9/I1</td>
+</tr>
+<tr>
+<td>110.789</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n90_s9/F</td>
+</tr>
+<tr>
+<td>111.269</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n92_s10/I1</td>
+</tr>
+<tr>
+<td>112.368</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>4</td>
+<td>hw/n92_s10/F</td>
+</tr>
+<tr>
+<td>112.848</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n53_s9/I1</td>
+</tr>
+<tr>
+<td>113.947</td>
+<td>1.099</td>
+<td>tINS</td>
+<td>FF</td>
+<td>6</td>
+<td>hw/n53_s9/F</td>
+</tr>
+<tr>
+<td>114.427</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/I0</td>
+</tr>
+<tr>
+<td>115.459</td>
+<td>1.032</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/n54_s15/F</td>
+</tr>
+<tr>
+<td>115.939</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_17_s/I1</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>1.045</td>
+<td>tINS</td>
+<td>FF</td>
+<td>1</td>
+<td>hw/hw_17_s/COUT</td>
+</tr>
+<tr>
+<td>116.984</td>
+<td>0.000</td>
+<td>tNET</td>
+<td>FF</td>
+<td>2</td>
+<td>hw/hw_16_s/CIN</td>
+</tr>
+<tr>
+<td>117.547</td>
+<td>0.563</td>
+<td>tINS</td>
+<td>FF</td>
+<td>13</td>
+<td>hw/hw_16_s/SUM</td>
+</tr>
+<tr>
+<td>118.027</td>
+<td>0.480</td>
+<td>tNET</td>
+<td>FF</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_37_s0/D</td>
+</tr>
+</table>
+<b>Data Required Path:</b>
+<table class="summary_table">
+<tr>
+<th>AT</th>
+<th>DELAY</th>
+<th>TYPE</th>
+<th>RF</th>
+<th>FANOUT</th>
+<th>NODE</th>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td> </td>
+<td> </td>
+<td> </td>
+<td>clk_27</td>
+</tr>
+<tr>
+<td>111.111</td>
+<td>0.000</td>
+<td>tCL</td>
+<td>RR</td>
+<td>1</td>
+<td>clk_27_ibuf/I</td>
+</tr>
+<tr>
+<td>112.093</td>
+<td>0.982</td>
+<td>tINS</td>
+<td>RR</td>
+<td>74</td>
+<td>clk_27_ibuf/O</td>
+</tr>
+<tr>
+<td>112.456</td>
+<td>0.363</td>
+<td>tNET</td>
+<td>RR</td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_37_s0/CLK</td>
+</tr>
+<tr>
+<td>112.426</td>
+<td>-0.030</td>
+<td>tUnc</td>
+<td> </td>
+<td> </td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_37_s0</td>
+</tr>
+<tr>
+<td>112.026</td>
+<td>-0.400</td>
+<td>tSu</td>
+<td> </td>
+<td>1</td>
+<td>gw_gao_inst_0/u_ao_top/data_i_reg_37_s0</td>
+</tr>
+</table>
+<b>Path Statistics:</b>
+<table class="summary_table">
+<tr>
+<td class="label">Clock Skew:</td>
+<td>0.618</td>
+</tr>
+<tr>
+<td class="label">Setup Relationship:</td>
+<td>3.086</td>
+</tr>
+<tr>
+<td class="label">Logic Level:</td>
+<td>7</td>
+</tr>
+<tr>
+<td class="label">Arrival Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+<tr>
+<td class="label">Arrival Data Path Delay:</td><td> cell: 5.937, 64.009%; route: 2.880, 31.050%; tC2Q: 0.458, 4.941%</td></tr>
+<tr>
+<td class="label">Required Clock Path Delay:</td><td> cell: 0.000, 0.000%; route: 0.363, 100.000%</td></tr>
+</table>
+<br/>
+</div><!-- content -->
+</div><!-- main_wrapper -->
+</body>
+</html>

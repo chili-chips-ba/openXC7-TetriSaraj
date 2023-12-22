@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module name="top" Register="37" Lut="5">
+    <SubModule name="clk27_to_clk75"/>
+    <SubModule name="soc" Register="1" Lut="53">
+        <SubModule name="cpu" Register="728" Alu="375" Lut="2193" Bsram="2">
+            <SubModule name="pcpi_mul" Register="255" Alu="78" Lut="333"/>
+            <SubModule name="pcpi_div" Register="200" Alu="64" Lut="349"/>
+        </SubModule>
+        <SubModule name="progmem" Register="1" Lut="4" Bsram="4"/>
+        <SubModule name="memory" Lut="4" Bsram="4"/>
+    </SubModule>
+    <SubModule name="hw" Register="3" Alu="20" Lut="79">
+        <SubModule name="map" Lut="1" Bsram="1"/>
+        <SubModule name="ram" Lut="1" Bsram="12"/>
+        <SubModule name="u_hdmi_backend" Register="27" Lut="55">
+            <SubModule name="u_fpga_pll" Register="2" Lut="1"/>
+            <SubModule name="_tdms_sdat[0].u_tmds" Register="13" Alu="8" Lut="31"/>
+            <SubModule name="_tdms_sdat[0].u_oser_dat"/>
+            <SubModule name="_tdms_sdat[0].u_obuf_dat"/>
+            <SubModule name="_tdms_sdat[1].u_tmds" Register="12" Alu="8" Lut="24"/>
+            <SubModule name="_tdms_sdat[1].u_oser_dat"/>
+            <SubModule name="_tdms_sdat[1].u_obuf_dat"/>
+            <SubModule name="_tdms_sdat[2].u_tmds" Register="12" Alu="8" Lut="28"/>
+            <SubModule name="_tdms_sdat[2].u_oser_dat"/>
+            <SubModule name="_tdms_sdat[2].u_obuf_dat"/>
+            <SubModule name="u_oser_clk"/>
+            <SubModule name="u_obuf_clk"/>
+        </SubModule>
+    </SubModule>
+    <SubModule name="gw_gao_inst_0" Register="327" Alu="9" Lut="239" Bsram="3"/>
+</Module>

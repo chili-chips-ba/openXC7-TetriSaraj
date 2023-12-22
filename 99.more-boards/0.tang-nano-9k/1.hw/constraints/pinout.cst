@@ -1,0 +1,42 @@
+#=======================================
+# Physical Constraints file / Pinout
+#=======================================
+
+#___Inputs
+IO_LOC  "clk_27" 52; // tangnano9k - 52; tangnano20k - 4
+IO_PORT "clk_27" PULL_MODE=UP  IO_TYPE=LVCMOS33 ;
+
+# S1
+IO_LOC  "btnL" 4; // tangnano9k - 4; tangnano20k - 87
+IO_PORT "btnL" PULL_MODE=UP;
+
+# S2
+IO_LOC  "btnR" 3; // tangnano9k - 3; tangnano20k - 88
+IO_PORT "btnR" PULL_MODE=UP;
+
+#___Outputs
+IO_LOC  "led_n[0]" 10;
+IO_PORT "led_n[0]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n[1]" 11; // tangnano9k - 11; tangnano20k - 15
+IO_PORT "led_n[1]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n[2]" 13;
+IO_PORT "led_n[2]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n[3]" 14;
+IO_PORT "led_n[3]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n[4]" 15;
+IO_PORT "led_n[4]" PULL_MODE=UP DRIVE=8;
+IO_LOC  "led_n[5]" 16;
+IO_PORT "led_n[5]" PULL_MODE=UP DRIVE=8;
+
+
+IO_LOC  "hdmi_clk_p"    69,68; // tangnano9k - 69,68; tangnano20k - 33,34
+IO_PORT "hdmi_clk_p"    PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[0]" 71,70; // tangnano9k - 71,70; tangnano20k - 35,36
+IO_PORT "hdmi_dat_p[0]" PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[1]" 73,72; // tangnano9k - 73,72; tangnano20k - 37,38
+IO_PORT "hdmi_dat_p[1]" PULL_MODE=NONE DRIVE=8;
+IO_LOC  "hdmi_dat_p[2]" 75,74; // tangnano9k - 75,74; tangnano20k - 39,40
+IO_PORT "hdmi_dat_p[2]" PULL_MODE=NONE DRIVE=8;
+
+
+#___End-of-File

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gowin-synthesis-project>
+<Project>
+    <Version>beta</Version>
+    <Device id="GW1NR-9C" package="QFN88P" speed="6" partNumber="GW1NR-LV9QN88PC6/I5"/>
+    <FileList>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\gowin_rpll\gowin_rpll.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.cpu\picorv32.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.cpu\picosoc_noflash.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_oddr.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_olvds.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_oser10.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\fpgatech_lib\GOWIN\fpga_pll.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_backend.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_pkg.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_tdms_enc.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.hdmi\hdmi_wrapper.sv" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.vga\vga_map_ram.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\ip.vga\vga_ram.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\progmem.v" type="verilog"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\src\top.v" type="verilog"/>
+        <File path="C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_AO_0\gw_ao_mem_ctrl.v" type="gao"/>
+        <File path="C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_AO_0\gw_ao_top.v" type="gao"/>
+        <File path="C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\GAO_LITE\GW_CON\gw_con_top.v" type="gao"/>
+        <File path="C:\Gowin\Gowin_V1.9.8.10\IDE\data\ipcores\gw_jtag.v" type="gao"/>
+        <File path="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\impl\gwsynthesis\RTL_GAO\gw_gao_top.v" type="gao"/>
+    </FileList>
+    <OptionList>
+        <Option type="disable_insert_pad" value="0"/>
+        <Option type="dsp_balance" value="0"/>
+        <Option type="include_path" value="C:/Gowin/Gowin_V1.9.8.10/IDE/data/ipcores/GAO_LITE"/>
+        <Option type="include_path" value="C:/Users/Armin/Desktop/TetriSaraj_Gowin/1.hw/project_v1/impl/gwsynthesis/RTL_GAO"/>
+        <Option type="looplimit" value="2000"/>
+        <Option type="output_file" value="C:\Users\Armin\Desktop\TetriSaraj_Gowin\1.hw\project_v1\impl\gwsynthesis\project_v1.vg"/>
+        <Option type="print_all_synthesis_warning" value="0"/>
+        <Option type="ram_rw_check" value="1"/>
+        <Option type="top_module" value="top"/>
+        <Option type="verilog_language" value="sysv-2017"/>
+        <Option type="vhdl_language" value="vhdl-2008"/>
+    </OptionList>
+</Project>
