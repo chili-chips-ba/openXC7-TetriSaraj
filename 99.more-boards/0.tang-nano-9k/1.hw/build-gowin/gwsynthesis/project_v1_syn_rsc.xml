@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module name="top" Register="37" Lut="5">
-    <SubModule name="clk27_to_clk75"/>
+    <SubModule name="clk27_to_clk64_8"/>
     <SubModule name="soc" Register="1" Lut="53">
         <SubModule name="cpu" Register="728" Alu="375" Lut="2193" Bsram="2">
             <SubModule name="pcpi_mul" Register="255" Alu="78" Lut="333"/>

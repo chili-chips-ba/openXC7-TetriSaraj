@@ -9,86 +9,83 @@ RAM              0x0000000000000000 0x0000000000008000 xrw
 Linker script and memory map
 
 
-.text           0x0000000000100000      0xf54
+.text           0x0000000000100000      0xc7c
                 0x0000000000100000                . = ALIGN (0x4)
  *(.text)
- .text          0x0000000000100000       0xd4 /tmp/ccrXMTqk.o
- .text          0x00000000001000d4      0xd3c /tmp/ccc736rO.o
-                0x0000000000100854                xorshift32
-                0x00000000001008cc                generateRandomBinary
-                0x0000000000100900                generateRandomNumber
-                0x0000000000100964                main
- .text          0x0000000000100e10      0x120 /tmp/ccu90i7V.o
-                0x0000000000100e10                putchar
-                0x0000000000100e60                print
-                0x0000000000100eb4                print_hex
+ .text          0x0000000000100000       0xd4 /tmp/ccEK0LvI.o
+ .text          0x00000000001000d4      0xa64 /tmp/ccQ5L6ol.o
+                0x0000000000100ad4                main
+ .text          0x0000000000100b38      0x120 /tmp/cc6mcztk.o
+                0x0000000000100b38                putchar
+                0x0000000000100b88                print
+                0x0000000000100bdc                print_hex
  *(.text*)
  *(.rodata)
- .rodata        0x0000000000100f30        0xd /tmp/ccc736rO.o
- *fill*         0x0000000000100f3d        0x3 
- .rodata        0x0000000000100f40       0x11 /tmp/ccu90i7V.o
+ .rodata        0x0000000000100c58        0xd /tmp/ccQ5L6ol.o
+ *fill*         0x0000000000100c65        0x3 
+ .rodata        0x0000000000100c68       0x11 /tmp/cc6mcztk.o
  *(.rodata*)
  *(.srodata)
  *(.srodata*)
-                0x0000000000100f54                . = ALIGN (0x4)
- *fill*         0x0000000000100f51        0x3 
-                0x0000000000100f54                _etext = .
-                0x0000000000100f54                _sidata = _etext
+                0x0000000000100c7c                . = ALIGN (0x4)
+ *fill*         0x0000000000100c79        0x3 
+                0x0000000000100c7c                _etext = .
+                0x0000000000100c7c                _sidata = _etext
 
-.rela.dyn       0x0000000000100f54        0x0
- .rela.text     0x0000000000100f54        0x0 /tmp/ccrXMTqk.o
+.rela.dyn       0x0000000000100c7c        0x0
+ .rela.text     0x0000000000100c7c        0x0 /tmp/ccEK0LvI.o
 
-.data           0x0000000000000000       0x7c load address 0x0000000000100f54
+.data           0x0000000000000000       0x74 load address 0x0000000000100c7c
                 0x0000000000000000                . = ALIGN (0x4)
                 0x0000000000000000                _sdata = .
                 0x0000000000000000                _ram_start = .
                 0x0000000000000000                . = ALIGN (0x4)
  *(.data)
- .data          0x0000000000000000        0x0 /tmp/ccrXMTqk.o
- .data          0x0000000000000000       0x70 /tmp/ccc736rO.o
- .data          0x0000000000000070        0x0 /tmp/ccu90i7V.o
+ .data          0x0000000000000000        0x0 /tmp/ccEK0LvI.o
+ .data          0x0000000000000000       0x70 /tmp/ccQ5L6ol.o
+ .data          0x0000000000000070        0x0 /tmp/cc6mcztk.o
  *(.data*)
  *(.sdata)
- .sdata         0x0000000000000070        0xc /tmp/ccc736rO.o
+ .sdata         0x0000000000000070        0x4 /tmp/ccQ5L6ol.o
  *(.sdata*)
-                0x000000000000007c                . = ALIGN (0x4)
-                0x000000000000007c                _edata = .
+                0x0000000000000074                . = ALIGN (0x4)
+                0x0000000000000074                _edata = .
 
-.bss            0x000000000000007c      0x4b4 load address 0x0000000000100fd0
-                0x000000000000007c                . = ALIGN (0x4)
-                0x000000000000007c                _sbss = .
+.bss            0x0000000000000074      0x4b4 load address 0x0000000000100cf0
+                0x0000000000000074                . = ALIGN (0x4)
+                0x0000000000000074                _sbss = .
  *(.bss)
- .bss           0x000000000000007c        0x0 /tmp/ccrXMTqk.o
- .bss           0x000000000000007c      0x4b0 /tmp/ccc736rO.o
- .bss           0x000000000000052c        0x0 /tmp/ccu90i7V.o
+ .bss           0x0000000000000074        0x0 /tmp/ccEK0LvI.o
+ .bss           0x0000000000000074      0x4b0 /tmp/ccQ5L6ol.o
+ .bss           0x0000000000000524        0x0 /tmp/cc6mcztk.o
  *(.bss*)
  *(.sbss)
- .sbss          0x000000000000052c        0x1 /tmp/ccc736rO.o
-                0x000000000000052c                buttons
+ .sbss          0x0000000000000524        0x1 /tmp/ccQ5L6ol.o
+                0x0000000000000524                buttons
  *(.sbss*)
  *(COMMON)
-                0x0000000000000530                . = ALIGN (0x4)
- *fill*         0x000000000000052d        0x3 
-                0x0000000000000530                _ebss = .
+                0x0000000000000528                . = ALIGN (0x4)
+ *fill*         0x0000000000000525        0x3 
+                0x0000000000000528                _ebss = .
 
-.heap           0x0000000000000530        0x0
-                0x0000000000000530                . = ALIGN (0x4)
-                0x0000000000000530                _heap_start = .
-LOAD /tmp/ccrXMTqk.o
-LOAD /tmp/ccc736rO.o
-LOAD /tmp/ccu90i7V.o
-OUTPUT(/mnt/c/Users/Armin/Desktop/TetriSaraj_Gowin/2.sw/main.elf elf32-littleriscv)
+.heap           0x0000000000000528        0x0
+                0x0000000000000528                . = ALIGN (0x4)
+                0x0000000000000528                _heap_start = .
+LOAD /tmp/ccEK0LvI.o
+LOAD /tmp/ccQ5L6ol.o
+LOAD /tmp/cc6mcztk.o
+OUTPUT(/mnt/c/Users/Armin/Desktop/openXC7-TetriSaraj/99.more-boards/0.tang-nano-9k/2.sw/main.elf elf32-littleriscv)
 
 .riscv.attributes
                 0x0000000000000000       0x21
  .riscv.attributes
-                0x0000000000000000       0x1f /tmp/ccrXMTqk.o
+                0x0000000000000000       0x1f /tmp/ccEK0LvI.o
  .riscv.attributes
-                0x000000000000001f       0x21 /tmp/ccc736rO.o
+                0x000000000000001f       0x21 /tmp/ccQ5L6ol.o
  .riscv.attributes
-                0x0000000000000040       0x21 /tmp/ccu90i7V.o
+                0x0000000000000040       0x21 /tmp/cc6mcztk.o
 
 .comment        0x0000000000000000        0xf
- .comment       0x0000000000000000        0xf /tmp/ccc736rO.o
+ .comment       0x0000000000000000        0xf /tmp/ccQ5L6ol.o
                                          0x10 (size before relaxing)
- .comment       0x000000000000000f       0x10 /tmp/ccu90i7V.o
+ .comment       0x000000000000000f       0x10 /tmp/cc6mcztk.o

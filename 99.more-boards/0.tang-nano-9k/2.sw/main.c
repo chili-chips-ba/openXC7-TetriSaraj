@@ -79,15 +79,15 @@ static void WriteScore(int score);
  * brief   reads the gpio register and changes the state of buttons variable
  * return  void
  */
-void GetButtonStates() {  
+/*void GetButtonStates() {  
 	buttons = (uint8_t)(reg_gpio >> 16)&0xFF;
-}
+}*/
 
 /* 
  * brief   displays openXC7 Demo on the screen
  * return  void
  */
-/*void DisplayProjectName() 
+void DisplayProjectName() 
 {
 	uint8_t nameY = 3;
 	for (uint8_t y = 0; y < 30; y++)
@@ -125,7 +125,7 @@ void GetButtonStates() {
 				reg_video_map[y * 40 + x] = 2;
 		}
 	}
-}*/
+}
 /* 
  * brief   displays CHILI CHIPS on the screen
  * return  void
@@ -471,14 +471,14 @@ void CharactersInit() {
 	uint32_t pixel = 0x00000FFF;
 	for(uint8_t z = 0; z < 16; z++) 
 	{
-		for(uint8_t y = 0; y < 24; y++) //bilo 16 umjesto 24
+		for(uint8_t y = 0; y < 24; y++)
 		{
-			for(uint8_t x = 0; x < 32; x++) //bilo 16 umjesto 32
+			for(uint8_t x = 0; x < 32; x++)
 			{
 				if(z == 0) // color black
 				{ 
 					if(y == 0 || y == 1) pixel = 0x00000222;
-					else if (x == 30 || x == 31) pixel = 0x00000111; //bilo 14 umjesto 30 i 15 umjesto 31 i sve tako ispod
+					else if (x == 30 || x == 31) pixel = 0x00000111;
 					else pixel = 0x00000000; 
 				} 
 				else if(z == 1) // color green
@@ -569,7 +569,7 @@ void CharactersInit() {
  * brief   handles the rotation of the piece
  * return  index of the rotated piece
  */
-int Rotate(int x, int y, int r)
+/*int Rotate(int x, int y, int r)
 {
     int pi = 0;
     switch (r % 4)
@@ -595,13 +595,13 @@ int Rotate(int x, int y, int r)
     }									// 0  4  8 12
 
     return pi;
-}
+}*/
 
 /* 
  * brief   checks if the piece can be moved to a specified position
  * return  true if the piece can fit and false otherwise
  */
-bool DoesPieceFit(int tetrominosIndex, int nRotation, int nPosX, int nPosY)
+/*bool DoesPieceFit(int tetrominosIndex, int nRotation, int nPosX, int nPosY)
 {
     // All Field cells >0 are occupied
     for (int x = 0; x < 4; x++)
@@ -622,14 +622,14 @@ bool DoesPieceFit(int tetrominosIndex, int nRotation, int nPosX, int nPosY)
                 if (nPosY + y >= 0 && nPosY + y < fieldHeight)
                 {
                     // In Bounds so do collision check
-                    if ((tetrominoes[tetrominosIndex][pi] != 0 && field[fi] != 0)) //|| (tetrominoes[ntetrominoes][pi] != 0 && (nPosY+y)==0) ) // dodali smo || ....
+                    if ((tetrominoes[tetrominosIndex][pi] != 0 && field[fi] != 0) // || (tetrominoes[ntetrominoes][pi] != 0 && (nPosY+y)==0) ) // dodali smo || ....
                         return false; // fail on first hit
                 }
             }
         }
 
     return true;
-}
+}*/
 
 /* 
  * brief   displays a digit on specified location
@@ -821,34 +821,34 @@ bool DoesPieceFit(int tetrominosIndex, int nRotation, int nPosX, int nPosY)
  * param   state: Pointer to the state variable for the random number generator
  * return  unsigned int: The generated random number.
  */
-unsigned int xorshift32(unsigned int *state) {
+/*unsigned int xorshift32(unsigned int *state) {
     unsigned int x = *state;
     x ^= x << 13;
     x ^= x >> 17;
     x ^= x << 5;
     *state = x;
     return x;
-}
+}*/
 /* 
  * brief   generates a random binary number (0 or 1)
  * return  int: The generated random binary number (0 or 1)
  */
-int generateRandomBinary() {
+/*int generateRandomBinary() {
     static unsigned int state = 123456789;  
     return xorshift32(&state) % 2;
-}
+}*/
 /* 
  * brief   generates a random number within the specified range [min, max]
  * param   min: The minimum value of the range
  * param   max: The maximum value of the range
  * return  int: The generated random number within the range [min, max]
  */
-int generateRandomNumber(int min, int max) {
+/*int generateRandomNumber(int min, int max) {
     static unsigned int state = 123456789; 
     unsigned int range = max - min + 1;
     unsigned int randomValue = xorshift32(&state) % range + min;
     return randomValue;
-}
+}*/
 
 
 void main()
@@ -861,7 +861,7 @@ void main()
 	reg_gpio = 0x0;	
 	
 	CharactersInit();
-	//DisplayProjectName();
+	DisplayProjectName();
 	//DisplayGameName();
 	//DisplayCompanyName(); 
 	//_delay(15000);
@@ -879,7 +879,7 @@ void main()
 	DisplayHeart(5,9,3);
 	DisplayHeart(15,9,3);
 	DisplayHeart(25,9,3);
-	_delay(20000);*/
+	_delay(20000);
 	
     // Game Logic
     uint16_t pieceIndex = 0;
@@ -905,11 +905,11 @@ void main()
 	
     uint8_t randomSideGenerator = 0;  // left - 0, right - 1
 	
-	//WriteScore(score);
+	WriteScore(score);
 
 	while (1) {
 		
-		/*if(isGameOver && numLives==1){
+		if(isGameOver && numLives==1){
 			isTheEnd=true;
 			isGameOver=false;
 		}
@@ -917,9 +917,9 @@ void main()
 		if (isGameOver)
 		{
 			numLives=numLives-1;
-			//DisplayGameOverScreen(numLives);
+			DisplayGameOverScreen(numLives);
 			
-			//_delay(18000);
+			_delay(18000);
 			
 			for (uint8_t y = 0; y < fieldHeight; y++) 
 			{
@@ -932,12 +932,12 @@ void main()
 				}
 			}
 			isGameOver=false;
-			//WriteScore(score);
+			WriteScore(score);
 		}
 		
 		if (isTheEnd)
 		{
-					//DisplayTheEndScreen();
+					DisplayTheEndScreen();
 				
 					while (!(buttons & BUTTON_CENTER))
 					{
@@ -960,13 +960,13 @@ void main()
 					score=0;
 					speed=15;
 					
-					//WriteScore(score);
-		}*/
+					WriteScore(score);
+		}
 		delay--;
 				
 		GetButtonStates();
 		
-		/*if (buttons & BUTTON_UP)
+		if (buttons & BUTTON_UP)
 		{
 			upButton = true;
 			print("BUTTON_UP\n");
@@ -990,7 +990,7 @@ void main()
 		{
 			centerButton = true;			
 			print("BUTTON_CENTER\n");
-		}*/
+		}
 		reg_gpio = 0x00000100 | buttons; // first 9 leds				
 			
 			
@@ -1003,7 +1003,7 @@ void main()
 
 
 		 	// Player input handling
-			/*if (!randomSideGenerator) // left part of the screen
+			if (!randomSideGenerator) // left part of the screen
 			{
 				pieceYCoordinate += (downButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate + 1)) ? 1 : 0;
 				pieceYCoordinate -= (upButton && DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate, pieceYCoordinate - 1)) ? 1 : 0;
@@ -1022,7 +1022,7 @@ void main()
 				rotationFlag = false;
 			}
 			else
-				rotationFlag = true;*/
+				rotationFlag = true;
 		
 			// Move the piece "down" the playfield if it's time
 			if (movePiece)
@@ -1030,8 +1030,8 @@ void main()
 				// Update difficulty every 50 pieces
 				gameTicksCount = 0;
 				pieceCount++;
-				/* if (pieceCount % 50 == 0)
-					if (speed >= 10) speed--; */
+				 if (pieceCount % 50 == 0)
+					if (speed >= 10) speed--; 
 
 				// Test if piece can be moved down
 				if (DoesPieceFit(pieceIndex, pieceRotation, pieceXCoordinate + 1, pieceYCoordinate) && !randomSideGenerator)
@@ -1057,7 +1057,7 @@ void main()
 					}
 
 					// Check if any lines formed
-					/*for (int x = 0; x < 4; x++)
+					for (int x = 0; x < 4; x++)
 					{
 						bool bLine = true;
 						for (int y = 1; y < fieldHeight - 7; y++)
@@ -1081,7 +1081,7 @@ void main()
 							linesXCoordinates[linesCount] = pieceXCoordinate + x;
 							linesCount++;
 						}
-					}*/
+					}
 					previousSide = randomSideGenerator;
 
 					// Score handling
@@ -1113,11 +1113,11 @@ void main()
 			}
 
 			// Rendering part
-			/*if (hasScoreChanged)
+			if (hasScoreChanged)
 			{
 				hasScoreChanged = false;
-				//DisplayScore(score, 22, 24);
-			}*/
+				DisplayScore(score, 22, 24);
+			}
 
 			// Display the current field state
 			 for (int y = 0; y < fieldHeight; y++) 
@@ -1141,7 +1141,7 @@ void main()
 			 }		
 
 			// Handle the lines removal
-			/*if (linesCount != 0)
+			if (linesCount != 0)
 			{
 				if (previousSide == 0)
 				{
@@ -1177,7 +1177,7 @@ void main()
 				linesXCoordinates[2] = 0;
 				linesXCoordinates[3] = 0;
 				linesCount = 0;		
-			}*/
+			}
 
 			rightButton = false;
 			downButton = false;
@@ -1185,6 +1185,5 @@ void main()
 			upButton = false;
 			leftButton = false;		
 		}
-	}
+	}*/
 }
-
