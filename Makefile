@@ -1,4 +1,4 @@
-NEXTPNR_XILINX_DIR ?= /openxc7/current/opt/nextpnr-xilinx
+NEXTPNR_XILINX_DIR ?= /nextpnr-xilinx/xilinx
 NEXTPNR_XILINX_PYTHON_DIR ?= ${NEXTPNR_XILINX_DIR}/python
 
 PREFIX ?= /openxc7
@@ -6,7 +6,7 @@ PYPY3 ?= pypy3
 
 PRJXRAY_DB_DIR ?= ${NEXTPNR_XILINX_DIR}/xilinx/external/prjxray-db
 
-DB_DIR=/opt/nextpnr-xilinx/xilinx/external/prjxray-db
+DB_DIR=/nextpnr-xilinx/xilinx/external/prjxray-db
 CHIPDB=./chipdb
 
 #PART = xc7a100tcsg324-1
@@ -45,7 +45,7 @@ top.json: $(TOP_FILE) $(SRC_FILES1b) $(SRC_FILES1a) $(SRC_FILES2) $(SRC_FILES3) 
 # The chip database only needs to be generated once
 # that is why we don't clean it with make clean
 ${CHIPDB}/${PART}.bin:
-	python3 /opt/nextpnr-xilinx/xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
+	python3 /nextpnr-xilinx/xilinx/python/bbaexport.py --device ${PART} --bba ${PART}.bba
 	bbasm -l ${PART}.bba ${CHIPDB}/${PART}.bin
 	rm -f ${PART}.bba
 	
@@ -57,7 +57,7 @@ top.frames: top.fasm
 	fasm2frames --part ${PART} --db-root ${DB_DIR}/artix7 $< > $@ #FIXME: fasm2frames should be on PATH
 
 top.bit: top.frames
-	xc7frames2bit --part_file /opt/nextpnr-xilinx/xilinx/external/prjxray-db/artix7/${PART}/part.yaml --part_name ${PART} --frm_file $< --output_file $@
+	xc7frames2bit --part_file /nextpnr-xilinx/xilinx/external/prjxray-db/artix7/${PART}/part.yaml --part_name ${PART} --frm_file $< --output_file $@
 	
 	#Install gcc package: apt install gcc-riscv64-unknown-elf
 CROSS=riscv64-unknown-elf-
