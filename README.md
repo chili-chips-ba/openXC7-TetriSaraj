@@ -140,7 +140,7 @@ The video rendering on the FPGA side is a bit more complicated and involves writ
 
 This HW/SW setup is more than the mere <i>TetriSaraj</i> game. It's a plaform, the solid foundation for developing other apps and retro games in the <b>40x30</b> <i>Mega-Character (MC) Frame Buffer</i> paradigm, yet with the full resolution graphics of the host board. We support <b>16 unique MCs</b>. The MCs can be viewed as mini-Sprites with course XY positioning. For more on this topic, see: https://www.youtube.com/watch?v=Pfy2vHygRaI .
 
-Given <i>Basys3</i> max resolution of 640x480 RGB444, one MC in this case is a 16x16 block with 4096 colors for each of its 256 dots. That's a rather impressive level of detail, given the meager memory footprint of our <i>MC Frame Buffer</i>. It would otherwise not be possible to accomodate such resolution even in the comparatively resourceful Artix7-35T.
+Given <i>Basys3</i> max resolution of 640x480 RGB444, one MC in this case is a 16x16 block with 4096 colors for each of its 256 dots. That's a rather impressive level of detail, given the meager memory footprint of our <i>MC Frame Buffer</i>. It would otherwise not be possible to accommodate such resolution even in the comparatively resourceful Artix7-35T.
 
 For example, the 4x smaller, 12x less expensive TangNano9K could also easily host our game. On it, and without having to change the game logic, the same 40x30 <i>MC Frame Buffer</i> would be rendered on the considerably larger 1280x720 RGB888 HDMI screen, by using 32x24 MCs with 16,777,216 colors for each of its 768 dots. Other than the static load of the MCs, and slightly modified RTL for the video back-end, the rest remains the same. This makes for low-effort porting.  
 
